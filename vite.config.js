@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { site } from './src/data/site.config.js'
 
-// No GitHub Pages o site fica em /movelaria/ (o workflow define BASE_PATH).
+// No GitHub Pages o site fica em /movelaria/ (o scripts/deploy.mjs define BASE_PATH).
 // Em hospedagem com domínio próprio fica na raiz.
 const base = process.env.BASE_PATH || '/'
 // Endereço público provisório (GitHub Pages) para a prévia do link no WhatsApp

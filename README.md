@@ -43,7 +43,7 @@ O JSON-LD, o canonical e o `og:url` são gerados no build a partir do `site.conf
 
 ## Publicar
 
-**GitHub Pages (prévia atual):** cada `push` na branch `main` publica o site automaticamente pelo workflow `.github/workflows/deploy.yml`, em `https://pedrodev-alvarenga.github.io/movelaria/`.
+**GitHub Pages (prévia atual):** rode `npm run deploy` — ele gera o build e publica na branch `gh-pages`, em `https://pedrodev-alvarenga.github.io/movelaria/`.
 
 Para outras hospedagens, rode `npm run build` e publique a pasta `dist/`:
 
