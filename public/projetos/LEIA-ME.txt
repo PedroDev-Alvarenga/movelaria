@@ -1,0 +1,25 @@
+FOTOS DE PROJETOS - MOVELARIA
+==============================
+Origem: capturas do feed do Instagram @movelaria_rodrigo (baixa resolução, ~245 px de largura).
+Servem como PLACEHOLDER até o Rodrigo enviar as imagens originais. Quando enviar, troque
+o arquivo mantendo o mesmo nome (ou ajuste o campo "arquivo" em src/data/projetos.js)
+e atualize largura/altura.
+
+Todas aparecem com o selo "Projeto 3D" por parecerem renderizações. Se alguma for obra
+entregue, mude "tipo" para 'projeto-entregue' em src/data/projetos.js.
+
+ARQUIVO                      AMBIENTE   O QUE MOSTRA
+---------------------------  ---------  ------------------------------------------------
+cozinha-bancada-led.jpg      Cozinha    Bancada de granito preto com banquetas, armários
+                                        em madeira clara e fita de LED embutida; coifa,
+                                        forno e geladeira embutidos. Marca d'água
+                                        "@movelaria_rod..." no canto.
+closet-iluminado.jpg         Closet     Closet em tons claros com cabideiros, gavetas
+                                        com puxador preto, prateleira de sapatos e
+                                        iluminação embutida; corredor ao fundo.
+quarto-home-office.jpg       Quarto     Quarto com armários suspensos brancos, painel
+                                        de madeira clara com LED e bancada de estudo
+                                        integrada, com cadeira de escritório.
+cozinha-madeira-clara.jpg    Cozinha    Cozinha com armários brancos e em madeira clara,
+                                        nicho com iluminação, bancada escura e
+                                        geladeira inox.
