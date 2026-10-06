@@ -436,6 +436,35 @@ body.menu-aberto {
   backdrop-filter: blur(2px);
 }
 
+/* Cena 3D: fica por cima do desenho técnico (que serve de placeholder/alternativa) */
+.hero__3d-card {
+  position: relative;
+}
+
+.hero__3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  touch-action: none;
+}
+
+.hero__3d canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__3d.hero__3d--pronto {
+  opacity: 1;
+}
+
+.hero__3d.hero__3d--pronto ~ .hero__3d-desenho {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
 .desenho {
   width: 100%;
   height: auto;
@@ -462,6 +491,17 @@ body.menu-aberto {
   font-weight: 500;
   font-size: 1.125rem;
   color: var(--madeira-texto);
+}
+
+.hero__etapa--1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero__etapa--1 svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Animação de assinatura: desenha uma vez, depois preenche e acende o LED */

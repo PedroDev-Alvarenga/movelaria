@@ -28,4 +28,5 @@ export const icones = {
   jantar: svg('<path d="M3 10.5h18M5 10.5V20M19 10.5V20M8.5 6.5h7M12 3.5v3"/><path d="M3 15h4M17 15h4"/>'),
   mesa: svg('<path d="M2.5 9h19M5 9l-1.5 11M19 9l1.5 11M7.5 9v6.5h9V9"/>'),
   estofado: svg('<path d="M5 10V7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5V10"/><path d="M3 11.5a2 2 0 0 1 4 0V14h10v-2.5a2 2 0 0 1 4 0V18H3zM5 18v2M19 18v2"/>'),
+  girar: svg('<path d="M20 11A8 8 0 1 0 17.5 17.2"/><path d="M20 5.5V11h-5.5"/>'),
 }

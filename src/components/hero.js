@@ -3,9 +3,10 @@ import { projetos } from '../data/projetos.js'
 import { whatsappLink } from '../utils/whatsapp.js'
 import { Imagem } from './imagem.js'
 import { icones } from './icones.js'
+import { iniciarHero3D } from './hero3d.js'
 
-// Desenho técnico de uma cozinha (vista frontal) que se desenha uma única vez
-// e depois ganha madeira, sálvia e a fita de LED acendendo.
+// Desenho técnico de uma cozinha (vista frontal), usado como miolo do
+// placeholder enquanto a cena 3D carrega (ou como alternativa se o WebGL falhar).
 function desenhoCozinha() {
   // `--d` = atraso de cada traço (s)
   const t = (d) => `class="traco" pathLength="1" style="--d:${d}s"`
@@ -137,10 +138,13 @@ export function Hero() {
               ? Imagem({ arquivo: fotoHero.arquivo, alt: '', largura: fotoHero.largura, altura: fotoHero.altura, lazy: false, classe: 'hero__foto' })
               : ''
           }
-          <div class="hero__prancheta" data-desenho>
-            ${desenhoCozinha()}
+          <div class="hero__prancheta hero__3d-card">
+            <div class="hero__3d" data-hero-3d></div>
+            <div class="hero__3d-desenho" data-desenho>
+              ${desenhoCozinha()}
+            </div>
           </div>
-          <figcaption class="hero__legenda">
+          <figcaption class="hero__legenda" data-legenda-hero>
             <span class="hero__etapa hero__etapa--1">Do desenho</span>
             <span class="hero__seta" aria-hidden="true">→</span>
             <span class="hero__etapa hero__etapa--2">ao móvel pronto</span>
@@ -151,8 +155,13 @@ export function Hero() {
 }
 
 export function iniciarHero() {
+  // Desenho técnico: fica visível como placeholder/alternativa até a cena 3D
+  // carregar (ou para sempre, se o WebGL não estiver disponível).
   const prancheta = document.querySelector('[data-desenho]')
-  if (!prancheta) return
-  // Dispara a animação uma única vez, depois que a página pintou.
-  requestAnimationFrame(() => requestAnimationFrame(() => prancheta.classList.add('desenhar')))
+  if (prancheta) {
+    requestAnimationFrame(() => requestAnimationFrame(() => prancheta.classList.add('desenhar')))
+  }
+
+  const contentor3d = document.querySelector('[data-hero-3d]')
+  if (contentor3d) iniciarHero3D(contentor3d)
 }

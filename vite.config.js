@@ -67,4 +67,9 @@ function seoDoNegocio() {
 export default defineConfig({
   base,
   plugins: [seoDoNegocio()],
+  build: {
+    // three.js (cena 3D do hero) é grande mas carrega sob demanda, em chunk
+    // separado, só quando o hero entra na tela — não bloqueia o carregamento inicial.
+    chunkSizeWarningLimit: 800,
+  },
 })
