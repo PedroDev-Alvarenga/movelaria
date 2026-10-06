@@ -128,6 +128,10 @@ export function Hero() {
         </div>
 
         <figure class="hero__visual ${fotoHero ? 'hero__visual--foto' : ''}">
+          <svg class="hero__anel" viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--terracota)" stroke-width="2" stroke-opacity=".35"/>
+            <circle cx="60" cy="60" r="38" fill="none" stroke="var(--marinho)" stroke-width="1.5" stroke-opacity=".22"/>
+          </svg>
           ${
             fotoHero
               ? Imagem({ arquivo: fotoHero.arquivo, alt: '', largura: fotoHero.largura, altura: fotoHero.altura, lazy: false, classe: 'hero__foto' })
