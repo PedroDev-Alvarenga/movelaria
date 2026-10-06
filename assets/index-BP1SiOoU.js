@@ -143,6 +143,10 @@
         </div>
 
         <figure class="hero__visual ${t?`hero__visual--foto`:``}">
+          <svg class="hero__anel" viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--terracota)" stroke-width="2" stroke-opacity=".35"/>
+            <circle cx="60" cy="60" r="38" fill="none" stroke="var(--marinho)" stroke-width="1.5" stroke-opacity=".22"/>
+          </svg>
           ${t?g({arquivo:t.arquivo,alt:``,largura:t.largura,altura:t.altura,lazy:!1,classe:`hero__foto`}):``}
           <div class="hero__prancheta" data-desenho>
             ${v()}
