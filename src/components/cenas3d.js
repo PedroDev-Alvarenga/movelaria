@@ -14,7 +14,7 @@ export function carregarRecursos(ctx) {
   return recursos
 }
 
-async function montarRecursos({ THREE, GLTFLoader, RoundedBoxGeometry }) {
+async function montarRecursos({ THREE, GLTFLoader, RoundedBoxGeometry, mergeGeometries }) {
   const loader = new THREE.TextureLoader()
   const textura = async (nome, cor = true) => {
     const t = await loader.loadAsync(`${BASE}modelos/texturas/${nome}`)
@@ -76,7 +76,7 @@ async function montarRecursos({ THREE, GLTFLoader, RoundedBoxGeometry }) {
   }
   M.carvalho.userData.madeira = true
 
-  return { THREE, RoundedBoxGeometry, M, planta, luz: texturaLuz(THREE) }
+  return { THREE, RoundedBoxGeometry, mergeGeometries, M, planta, luz: texturaLuz(THREE) }
 }
 
 // Degradê para simular a luz da fita de LED "lavando" a parede
@@ -102,6 +102,40 @@ function texturaLuz(THREE) {
   const t = new THREE.CanvasTexture(c)
   t.colorSpace = THREE.SRGBColorSpace
   return t
+}
+
+// Junta as peças que usam o mesmo material numa malha só: o quarto tem quase
+// 100 peças (cada ripa é uma), e desenhar uma a uma travava o celular.
+function mesclarPorMaterial(R, grupo) {
+  const { THREE, mergeGeometries } = R
+  const porMaterial = new Map()
+  for (const filho of [...grupo.children]) {
+    if (!filho.isMesh || Array.isArray(filho.material) || filho.material.transparent) continue
+    const lista = porMaterial.get(filho.material) ?? []
+    lista.push(filho)
+    porMaterial.set(filho.material, lista)
+  }
+  for (const [material, malhas] of porMaterial) {
+    if (malhas.length < 2) continue
+    const geos = malhas.map((m) => {
+      m.updateMatrix()
+      const g = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone()
+      g.clearGroups()
+      g.applyMatrix4(m.matrix)
+      return g
+    })
+    const unida = mergeGeometries(geos, false)
+    geos.forEach((g) => g.dispose())
+    if (!unida) continue
+    malhas.forEach((m) => {
+      grupo.remove(m)
+      m.geometry.dispose()
+    })
+    const malha = new THREE.Mesh(unida, material)
+    malha.castShadow = true
+    malha.receiveShadow = true
+    grupo.add(malha)
+  }
 }
 
 // --- Ajudantes de montagem ---
@@ -267,6 +301,7 @@ export async function criarGuardaRoupa(ctx) {
   // planta ao lado, como nas fotos do feed
   planta(1.0, 1.62, 0.05)
 
+  mesclarPorMaterial(R, grupo)
   return grupo
 }
 
@@ -363,9 +398,9 @@ export async function criarQuarto(ctx) {
   const cupula = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.16, 32, 1, true), M.cupula)
   cupula.position.set(xLuminaria, 0.9, zLuminaria)
   grupo.add(pe, haste, cupula)
-  const luzLuminaria = new THREE.PointLight(0xffc68a, 0.9, 3, 2)
-  luzLuminaria.position.set(xLuminaria, 0.86, zLuminaria + 0.05)
-  grupo.add(luzLuminaria)
+  // brilho da luminária na parede (mais leve que uma luz de verdade)
+  lavagem(0.7, 0.45, xLuminaria, 0.98 + 0.225, fundo + 0.006, 0.35, true)
+  lavagem(0.7, 0.3, xLuminaria, 0.82 - 0.15, fundo + 0.006, 0.3)
 
   // livros e planta pequena no criado-mudo da direita
   const xDireita = xCama + 1.16
@@ -389,5 +424,6 @@ export async function criarQuarto(ctx) {
   // planta grande no canto da frente
   planta(1.1, 1.62, 1.2)
 
+  mesclarPorMaterial(R, grupo)
   return grupo
 }

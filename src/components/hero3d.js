@@ -40,12 +40,14 @@ function carregarThree() {
       import('three/addons/loaders/GLTFLoader.js'),
       import('three/addons/environments/RoomEnvironment.js'),
       import('three/addons/geometries/RoundedBoxGeometry.js'),
-    ]).then(([THREE, { OrbitControls }, { GLTFLoader }, { RoomEnvironment }, { RoundedBoxGeometry }]) => ({
+      import('three/addons/utils/BufferGeometryUtils.js'),
+    ]).then(([THREE, { OrbitControls }, { GLTFLoader }, { RoomEnvironment }, { RoundedBoxGeometry }, { mergeGeometries }]) => ({
       THREE,
       OrbitControls,
       GLTFLoader,
       RoomEnvironment,
       RoundedBoxGeometry,
+      mergeGeometries,
     }))
   }
   return carregamento
@@ -173,8 +175,11 @@ export async function iniciarHero3D(container) {
   let { azimute, polar, raio: raioFinal } = CAMERA_PADRAO
   let raioInicial = raioFinal + 2.4
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
   renderer.shadowMap.enabled = true
+  // a luz e os móveis não se mexem: a sombra só é recalculada quando troca a peça
+  renderer.shadowMap.autoUpdate = false
+  renderer.shadowMap.needsUpdate = true
   renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -231,6 +236,21 @@ export async function iniciarHero3D(container) {
   }
   ajustarTamanho()
 
+  // compila os shaders das peças de uma vez, pra primeira troca não engasgar
+  for (const { modelo } of itensCarregados) {
+    cena.add(modelo)
+    try {
+      if (renderer.compileAsync && renderer.extensions.has('KHR_parallel_shader_compile')) {
+        await renderer.compileAsync(cena, camera)
+      } else {
+        renderer.compile(cena, camera)
+      }
+    } catch {
+      // se falhar, compila na hora de mostrar
+    }
+    cena.remove(modelo)
+  }
+
   const renderizar = () => {
     controles.update()
     renderer.render(cena, camera)
@@ -266,6 +286,7 @@ export async function iniciarHero3D(container) {
     if (grupoAtual) cena.remove(grupoAtual)
     grupoAtual = modelo
     cena.add(grupoAtual)
+    renderer.shadowMap.needsUpdate = true
     const cam = { ...CAMERA_PADRAO, ...item.camera }
     ;({ azimute, polar } = cam)
     raioFinal = cam.raio
