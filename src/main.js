@@ -5,6 +5,7 @@ import '@fontsource/fraunces/latin-500-italic.css'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
+import './styles/secoes.css'
 
 import { Header, iniciarHeader } from './components/header.js'
 import { Hero, iniciarHero } from './components/hero.js'

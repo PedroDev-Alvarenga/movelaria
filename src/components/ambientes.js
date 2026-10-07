@@ -1,32 +1,34 @@
 import { ambientes } from '../data/ambientes.js'
 import { whatsappLink, mensagemAmbiente } from '../utils/whatsapp.js'
 import { icones } from './icones.js'
+import { rotulo } from './rotulo.js'
 
 export function Ambientes() {
   return `
     <section class="secao ambientes" id="ambientes" aria-labelledby="ambientes-titulo">
-      <div class="container">
-        <header class="secao__topo revelar">
-          <p class="pilula">Ambientes</p>
-          <h2 id="ambientes-titulo">Seu espaço merece mais do que <span class="destaque">móveis prontos.</span></h2>
-          <p class="secao__intro">Projetamos para a casa inteira — e também fazemos mesas e estofados sob medida. Escolha o ambiente e fale direto com a gente.</p>
+      <div class="container ambientes__grade">
+        <header class="ambientes__topo revelar">
+          ${rotulo('Ambientes')}
+          <h2 id="ambientes-titulo">Seu espaço merece mais do que móveis prontos.</h2>
+          <p>Projetamos para a casa inteira — e também fazemos mesas e estofados sob medida. Escolha o ambiente e fale direto com a gente pelo WhatsApp.</p>
         </header>
 
-        <ul class="ambientes__grade">
+        <ol class="indice revelar">
           ${ambientes
             .map(
-              (a) => `
-            <li class="revelar">
-              <a class="ambiente-card" href="${whatsappLink(mensagemAmbiente(a.mensagem))}" target="_blank" rel="noopener">
-                <span class="ambiente-card__icone">${icones[a.icone]}</span>
-                <span class="ambiente-card__nome">${a.nome}</span>
-                <span class="ambiente-card__frase">${a.frase}</span>
-                <span class="ambiente-card__acao">Pedir orçamento ${icones.seta}<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></span>
+              (a, i) => `
+            <li>
+              <a class="indice__linha" href="${whatsappLink(mensagemAmbiente(a.mensagem))}" target="_blank" rel="noopener">
+                <span class="indice__num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+                <span class="indice__nome">${a.nome}</span>
+                <span class="indice__frase">${a.frase}</span>
+                <span class="indice__seta" aria-hidden="true">${icones.seta}</span>
+                <span class="sr-only"> — pedir orçamento pelo WhatsApp (abre em nova aba)</span>
               </a>
             </li>`,
             )
             .join('')}
-        </ul>
+        </ol>
       </div>
     </section>`
 }

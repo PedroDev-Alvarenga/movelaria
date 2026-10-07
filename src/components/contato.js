@@ -2,68 +2,53 @@ import { site, enderecoCompleto, mapsUrl, mapsEmbedUrl } from '../data/site.conf
 import { ambientes } from '../data/ambientes.js'
 import { whatsappLink } from '../utils/whatsapp.js'
 import { icones } from './icones.js'
+import { rotulo } from './rotulo.js'
 
 export function Contato() {
   return `
     <section class="secao contato" id="contato" aria-labelledby="contato-titulo">
-      <div class="container">
-        <div class="contato__chamada revelar">
-          <p class="pilula pilula--clara">Contato</p>
+      <div class="container contato__grade">
+        <div class="contato__info revelar">
+          ${rotulo('Contato')}
           <h2 id="contato-titulo">Vamos tirar seu projeto <span class="destaque">do papel?</span></h2>
-          <p>Conte pra gente o que você imagina. Respondemos pelo WhatsApp.</p>
-        </div>
+          <p class="contato__intro">Conte pra gente o que você imagina. Respondemos pelo WhatsApp.</p>
 
-        <div class="contato__grade">
-          <div class="contato__info revelar">
-            <ul class="contato__lista">
-              <li>
-                <span class="contato__icone">${icones.whatsapp}</span>
-                <div>
-                  <span class="contato__rotulo">Telefone e WhatsApp</span>
-                  <a href="${site.telefoneLink}">${site.telefoneExibicao}</a>
-                  <a class="contato__link-zap" href="${whatsappLink()}" target="_blank" rel="noopener">Chamar no WhatsApp<span class="sr-only"> (abre em nova aba)</span></a>
-                </div>
-              </li>
-              <li>
-                <span class="contato__icone">${icones.local}</span>
-                <div>
-                  <span class="contato__rotulo">Endereço</span>
-                  <address>${site.endereco.rua}, ${site.endereco.bairro}<br>${site.endereco.cidade} — ${site.endereco.uf}, CEP ${site.endereco.cep}</address>
-                </div>
-              </li>
-              <li>
-                <span class="contato__icone">${icones.relogio}</span>
-                <div>
-                  <span class="contato__rotulo">Horário</span>
-                  <span class="pendente">${site.horario}</span>
-                  <span class="contato__obs">${site.horarioObservacao}</span>
-                </div>
-              </li>
-              ${
-                site.fazEntrega
-                  ? `<li>
-                <span class="contato__icone">${icones.entrega}</span>
-                <div>
-                  <span class="contato__rotulo">Entrega</span>
-                  <span>Fazemos entrega dos móveis.</span>
-                </div>
-              </li>`
-                  : ''
-              }
-            </ul>
-
-            <div class="mapa">
-              <div class="mapa__fachada" data-mapa>
-                <span class="mapa__pino">${icones.local}</span>
-                <p class="mapa__endereco">${enderecoCompleto}</p>
-                <div class="mapa__acoes">
-                  <a class="botao botao--primario" href="${mapsUrl}" target="_blank" rel="noopener">${icones.mapa} Abrir no Google Maps<span class="sr-only"> (nova aba)</span></a>
-                  <button type="button" class="botao botao--secundario" data-carregar-mapa>Ver mapa aqui</button>
-                </div>
-                <p class="mapa__aviso">O mapa é carregado do Google só se você clicar.</p>
-              </div>
+          <dl class="contato__dados">
+            <div>
+              <dt>Telefone e WhatsApp</dt>
+              <dd>
+                <a class="contato__telefone" href="${site.telefoneLink}">${site.telefoneExibicao}</a>
+                <a class="link-seta" href="${whatsappLink()}" target="_blank" rel="noopener">Chamar no WhatsApp ${icones.seta}<span class="sr-only"> (abre em nova aba)</span></a>
+              </dd>
             </div>
-          </div>
+            <div>
+              <dt>Endereço</dt>
+              <dd>
+                <address>${site.endereco.rua}, ${site.endereco.bairro}<br>${site.endereco.cidade} — ${site.endereco.uf}, CEP ${site.endereco.cep}</address>
+                <div class="mapa" data-mapa>
+                  <a class="link-seta" href="${mapsUrl}" target="_blank" rel="noopener">Abrir no Google Maps ${icones.seta}<span class="sr-only"> (nova aba)</span></a>
+                  <button type="button" class="mapa__carregar" data-carregar-mapa>Ver mapa aqui</button>
+                  <span class="mapa__aviso">O mapa só é carregado do Google se você clicar.</span>
+                </div>
+              </dd>
+            </div>
+            <div>
+              <dt>Horário</dt>
+              <dd>
+                <span class="pendente">${site.horario}</span>
+                <span class="contato__obs">${site.horarioObservacao}</span>
+              </dd>
+            </div>
+            ${
+              site.fazEntrega
+                ? `<div>
+              <dt>Entrega</dt>
+              <dd>Fazemos entrega dos móveis.</dd>
+            </div>`
+                : ''
+            }
+          </dl>
+        </div>
 
           <form class="form revelar" novalidate data-form aria-labelledby="form-titulo">
             <h3 id="form-titulo" class="form__titulo">Peça um orçamento</h3>
@@ -101,7 +86,6 @@ export function Contato() {
             <button type="submit" class="botao botao--primario botao--grande botao--largo">${icones.whatsapp} Enviar pelo WhatsApp</button>
             <div class="form__status" role="status" aria-live="polite" data-form-status></div>
           </form>
-        </div>
       </div>
     </section>`
 }

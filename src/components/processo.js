@@ -1,5 +1,6 @@
 import { whatsappLink } from '../utils/whatsapp.js'
 import { icones } from './icones.js'
+import { rotulo } from './rotulo.js'
 
 const passos = [
   {
@@ -24,10 +25,9 @@ export function Processo() {
   return `
     <section class="secao processo" id="como-funciona" aria-labelledby="processo-titulo">
       <div class="container">
-        <header class="secao__topo revelar">
-          <p class="pilula">Como funciona</p>
-          <h2 id="processo-titulo">Do primeiro papo ao móvel <span class="destaque">montado.</span></h2>
-          <p class="secao__intro">Um trabalho sob medida tem etapas. A gente acompanha você em todas elas.</p>
+        <header class="processo__topo revelar">
+          ${rotulo('Como funciona')}
+          <h2 id="processo-titulo">Do primeiro papo ao móvel montado.</h2>
         </header>
 
         <ol class="processo__lista">
@@ -43,11 +43,11 @@ export function Processo() {
             .join('')}
         </ol>
 
-        <div class="processo__cta revelar">
-          <a class="botao botao--primario" href="${whatsappLink('Olá! Quero começar meu projeto com a Movelaria. Podemos conversar?')}" target="_blank" rel="noopener">
-            ${icones.whatsapp} Solicite seu projeto
+        <p class="processo__cta revelar">
+          <a class="link-seta" href="${whatsappLink('Olá! Quero começar meu projeto com a Movelaria. Podemos conversar?')}" target="_blank" rel="noopener">
+            Começar meu projeto ${icones.seta}<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span>
           </a>
-        </div>
+        </p>
       </div>
     </section>`
 }

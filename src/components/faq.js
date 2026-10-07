@@ -1,4 +1,5 @@
 import { whatsappLink } from '../utils/whatsapp.js'
+import { rotulo } from './rotulo.js'
 
 const falar = (assunto, inicio = 'Fale') =>
   ` <a href="${whatsappLink(`Olá! Tenho uma dúvida sobre ${assunto}.`)}" target="_blank" rel="noopener">${inicio} com a nossa equipe<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></a>.`
@@ -37,10 +38,10 @@ export function Faq() {
   return `
     <section class="secao faq" id="perguntas" aria-labelledby="faq-titulo">
       <div class="container faq__grade">
-        <header class="secao__topo faq__topo revelar">
-          <p class="pilula">Perguntas frequentes</p>
-          <h2 id="faq-titulo">Móveis planejados são <span class="destaque">caros mesmo?</span></h2>
-          <p class="secao__intro">As dúvidas que mais ouvimos — respondidas sem rodeio.</p>
+        <header class="faq__topo revelar">
+          ${rotulo('Perguntas frequentes')}
+          <h2 id="faq-titulo">As dúvidas que mais ouvimos.</h2>
+          <p>Respondidas sem rodeio. Se a sua não estiver aqui, chame a gente no WhatsApp.</p>
         </header>
 
         <div class="acordeao revelar">

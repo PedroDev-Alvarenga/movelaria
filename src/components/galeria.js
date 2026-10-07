@@ -1,57 +1,80 @@
 import { projetos } from '../data/projetos.js'
 import { ambientes } from '../data/ambientes.js'
+import { site } from '../data/site.config.js'
 import { whatsappLink } from '../utils/whatsapp.js'
 import { Imagem, iniciarImagens } from './imagem.js'
 import { icones } from './icones.js'
+import { rotulo } from './rotulo.js'
 
 const nomeAmbiente = (id) => ambientes.find((a) => a.id === id)?.nome ?? id
+
+// A partir de quantas fotos vale mostrar o filtro por ambiente
+const MINIMO_PARA_FILTRO = 8
 
 function selo(p) {
   return p.tipo === 'render-3d' ? '<span class="selo-3d">Projeto 3D</span>' : ''
 }
 
+// Só entram na galeria os itens que já têm foto
+const fotos = projetos.filter((p) => p.arquivo)
+
 export function Galeria() {
-  // Só mostra filtros de ambientes que têm itens na galeria
-  const usados = ambientes.filter((a) => projetos.some((p) => p.ambiente === a.id))
+  const usados = ambientes.filter((a) => fotos.some((p) => p.ambiente === a.id))
+  const temFiltro = fotos.length >= MINIMO_PARA_FILTRO && usados.length > 1
+  const temRender = fotos.some((p) => p.tipo === 'render-3d')
 
   return `
     <section class="secao galeria" id="projetos" aria-labelledby="projetos-titulo">
       <div class="container">
-        <header class="secao__topo revelar">
-          <p class="pilula">Projetos</p>
-          <h2 id="projetos-titulo">Bonito por fora. <span class="destaque">Inteligente por dentro.</span></h2>
-          <p class="secao__intro">Alguns ambientes projetados pela Movelaria. Imagens com o selo “Projeto 3D” são renderizações de projeto.</p>
+        <header class="galeria__topo revelar">
+          <div>
+            ${rotulo('Projetos')}
+            <h2 id="projetos-titulo">Bonito por fora.<br>Inteligente por dentro.</h2>
+          </div>
+          <p>Alguns ambientes projetados pela Movelaria.${temRender ? ' As imagens marcadas como “Projeto 3D” são renderizações de projeto.' : ''}</p>
         </header>
 
-        <div class="filtros revelar" role="group" aria-label="Filtrar projetos por ambiente">
+        ${
+          temFiltro
+            ? `<div class="filtros revelar" role="group" aria-label="Filtrar projetos por ambiente">
           <button type="button" class="filtro" aria-pressed="true" data-filtro="todos">Todos</button>
           ${usados.map((a) => `<button type="button" class="filtro" aria-pressed="false" data-filtro="${a.id}">${a.nome}</button>`).join('')}
         </div>
-        <p class="sr-only" aria-live="polite" data-galeria-status></p>
+        <p class="sr-only" aria-live="polite" data-galeria-status></p>`
+            : ''
+        }
 
         <ul class="galeria__grade" data-galeria>
-          ${projetos
+          ${fotos
             .map(
               (p, i) => `
-            <li class="galeria__item" data-ambiente="${p.ambiente}">
+            <li class="galeria__item revelar" data-ambiente="${p.ambiente}">
               <button type="button" class="galeria__botao" data-abrir="${i}">
                 <span class="sr-only">Ampliar: </span>
-                ${Imagem({ arquivo: p.arquivo, alt: p.alt, legenda: nomeAmbiente(p.ambiente), largura: p.largura, altura: p.altura })}
+                ${Imagem({ arquivo: p.arquivo, alt: p.alt, largura: p.largura, altura: p.altura })}
                 ${selo(p)}
                 <span class="galeria__info">
-                  <span class="galeria__titulo">${p.titulo}</span>
                   <span class="galeria__ambiente">${nomeAmbiente(p.ambiente)}</span>
+                  <span class="galeria__titulo">${p.titulo}</span>
                 </span>
               </button>
             </li>`,
             )
             .join('')}
+          <li class="galeria__item galeria__item--insta revelar">
+            <a class="galeria__insta" href="${site.instagram.url}" target="_blank" rel="noopener">
+              <span class="galeria__insta-icone">${icones.instagram}</span>
+              <span class="galeria__insta-texto">Mais projetos no Instagram</span>
+              <span class="galeria__insta-usuario">${site.instagram.usuario} ${icones.seta}</span>
+              <span class="sr-only">(abre em nova aba)</span>
+            </a>
+          </li>
         </ul>
 
         <div class="galeria__cta revelar">
-          <p>Gostou de algum ambiente? <strong>Vamos tirar seu projeto do papel?</strong></p>
-          <a class="botao botao--primario" href="${whatsappLink('Olá! Vi os projetos no site da Movelaria e gostaria de solicitar meu projeto.')}" target="_blank" rel="noopener">
-            ${icones.whatsapp} Solicite seu projeto
+          <p>Gostou de algum ambiente? Vamos tirar seu projeto do papel?</p>
+          <a class="link-seta" href="${whatsappLink('Olá! Vi os projetos no site da Movelaria e gostaria de solicitar meu projeto.')}" target="_blank" rel="noopener">
+            Solicite seu projeto ${icones.seta}<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span>
           </a>
         </div>
       </div>
@@ -79,14 +102,14 @@ export function Galeria() {
 export function iniciarGaleria() {
   const secao = document.getElementById('projetos')
   const grade = secao.querySelector('[data-galeria]')
-  const itens = [...grade.querySelectorAll('.galeria__item')]
+  const itens = [...grade.querySelectorAll('.galeria__item:not(.galeria__item--insta)')]
   const status = secao.querySelector('[data-galeria-status]')
   const dialog = secao.querySelector('[data-lightbox]')
-  let visiveis = projetos.map((_, i) => i)
+  let visiveis = fotos.map((_, i) => i)
   let atual = 0
   let gatilho = null
 
-  // Filtro
+  // Filtro (só existe quando há fotos suficientes)
   secao.querySelectorAll('[data-filtro]').forEach((botao) => {
     botao.addEventListener('click', () => {
       const filtro = botao.dataset.filtro
@@ -106,10 +129,10 @@ export function iniciarGaleria() {
 
   function mostrar(indice) {
     atual = indice
-    const p = projetos[indice]
+    const p = fotos[indice]
     const nome = nomeAmbiente(p.ambiente)
     midia.innerHTML =
-      Imagem({ arquivo: p.arquivo, alt: p.alt, legenda: nome, largura: p.largura, altura: p.altura, lazy: false, classe: 'imagem--lightbox', proporcaoReal: true }) + selo(p)
+      Imagem({ arquivo: p.arquivo, alt: p.alt, largura: p.largura, altura: p.altura, lazy: false, classe: 'imagem--lightbox', proporcaoReal: true }) + selo(p)
     iniciarImagens(midia)
     dialog.querySelector('[data-titulo]').textContent = p.titulo
     dialog.querySelector('[data-ambiente-lb]').textContent = nome + (p.tipo === 'render-3d' ? ' · Projeto 3D' : '')
@@ -119,8 +142,7 @@ export function iniciarGaleria() {
 
   function passo(direcao) {
     const pos = visiveis.indexOf(atual)
-    const proximo = visiveis[(pos + direcao + visiveis.length) % visiveis.length]
-    mostrar(proximo)
+    mostrar(visiveis[(pos + direcao + visiveis.length) % visiveis.length])
   }
 
   grade.addEventListener('click', (e) => {
@@ -139,7 +161,6 @@ export function iniciarGaleria() {
     if (e.key === 'ArrowLeft') passo(-1)
     if (e.key === 'ArrowRight') passo(1)
   })
-  // Clique no fundo escuro fecha
   dialog.addEventListener('click', (e) => {
     if (e.target === dialog) dialog.close()
   })

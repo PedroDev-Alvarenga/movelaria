@@ -32,24 +32,23 @@ await tg.click()
 await page.locator('.nav__link', { hasText: 'Contato' }).click()
 ok((await tg.getAttribute('aria-expanded')) === 'false', 'clicar num link fecha o menu')
 
-// Galeria: filtro
-await page.locator('[data-filtro="cozinha"]').click()
-const vis = await page.locator('.galeria__item:not([hidden])').count()
-ok(vis === 2, `filtro Cozinha mostra 2 itens (mostrou ${vis})`)
-ok((await page.locator('[data-filtro="cozinha"]').getAttribute('aria-pressed')) === 'true', 'filtro usa aria-pressed')
+// Galeria: só fotos reais + bloco do Instagram (filtro só aparece com 8+ fotos)
+const nFotos = await page.locator('[data-abrir]').count()
+ok(nFotos === 4, `galeria mostra só as 4 fotos reais (mostrou ${nFotos})`)
+ok((await page.locator('.galeria__insta').getAttribute('href')) === 'https://www.instagram.com/movelaria_rodrigo/', 'bloco do Instagram com link certo')
+ok((await page.locator('[data-filtro]').count()) === 0, 'sem filtro com poucas fotos')
 
 // Lightbox
-await page.locator('.galeria__item:not([hidden]) [data-abrir]').first().click()
+await page.locator('[data-abrir]').first().click()
 ok(await page.locator('[data-lightbox]').evaluate((d) => d.open), 'lightbox abre')
-ok((await page.locator('[data-contador]').textContent()) === '1 / 2', 'contador 1 / 2 respeita o filtro')
+ok((await page.locator('[data-contador]').textContent()) === '1 / 4', 'contador 1 / 4')
 await page.keyboard.press('ArrowRight')
-ok((await page.locator('[data-titulo]').textContent()) === 'Cozinha em madeira clara', 'seta → avança')
+ok((await page.locator('[data-titulo]').textContent()) === 'Closet com iluminação', 'seta → avança')
 ok((await page.locator('[data-ambiente-lb]').textContent()).includes('Projeto 3D'), 'selo Projeto 3D no lightbox')
 await page.screenshot({ path: `${out}/t-lightbox.png` })
 await page.keyboard.press('Escape')
 ok(!(await page.locator('[data-lightbox]').evaluate((d) => d.open)), 'Esc fecha o lightbox')
 ok(await page.evaluate(() => document.activeElement.matches('[data-abrir]')), 'foco volta para o item da galeria')
-await page.locator('[data-filtro="todos"]').click()
 
 // FAQ
 const b = page.locator('.acordeao__botao').first()
