@@ -1,6 +1,8 @@
 import { icones } from './icones.js'
+import { criarGuardaRoupa, criarQuarto } from './cenas3d.js'
 
-// Carrossel 3D leve do hero: alterna entre peças de móvel prontas (ver
+// Carrossel 3D leve do hero: alterna entre um guarda-roupa planejado e um
+// quarto completo, montados em código com texturas CC0 (ver cenas3d.js e
 // public/modelos/CREDITOS.txt) a cada 2s — ilustrativo, não são móveis reais
 // da Movelaria. Pausa ao passar o mouse ou arrastar, e com prefers-reduced-motion
 // começa pausado (o usuário navega pelas bolinhas/botão). Carregado sob demanda
@@ -8,20 +10,26 @@ import { icones } from './icones.js'
 
 const INTERVALO_MS = 2000
 
+// Cada item pode ser um arquivo .glb/.gltf (`arquivo`) ou uma cena montada em
+// código (`criar`). `camera` ajusta o ângulo de cada peça.
+const CREDITO_TEXTURAS = 'texturas e planta: Poly Haven, CC0'
 const ITENS = [
   {
-    id: 'armario',
-    arquivo: 'modelos/armario/armario.gltf',
-    nome: 'armário ripado',
-    credito: 'Peça 3D ilustrativa — modelo "Modern Wooden Cabinet", Poly Haven, CC0',
+    id: 'guarda-roupa',
+    criar: criarGuardaRoupa,
+    nome: 'guarda-roupa planejado',
+    credito: `Peça 3D ilustrativa — guarda-roupa planejado; ${CREDITO_TEXTURAS}`,
+    camera: { azimute: -0.45, polar: 1.32, raio: 6.3, alvo: 0.45 },
   },
   {
-    id: 'sofa',
-    arquivo: 'modelos/sofa-veludo.glb',
-    nome: 'sofá de veludo',
-    credito: 'Peça 3D ilustrativa — modelo "GlamVelvetSofa" de Eric Chadwick / Wayfair, CC BY 4.0',
+    id: 'quarto',
+    criar: criarQuarto,
+    nome: 'quarto completo',
+    credito: `Ambiente 3D ilustrativo — quarto planejado; ${CREDITO_TEXTURAS}`,
+    camera: { azimute: -0.6, polar: 1.02, raio: 6.9, alvo: 0.3, exposicao: 0.8 },
   },
 ]
+const CAMERA_PADRAO = { azimute: -0.5, polar: 1.25, raio: 6.4, alvo: 0.42, exposicao: 1.05 }
 
 let carregamento
 function carregarThree() {
@@ -31,23 +39,29 @@ function carregarThree() {
       import('three/addons/controls/OrbitControls.js'),
       import('three/addons/loaders/GLTFLoader.js'),
       import('three/addons/environments/RoomEnvironment.js'),
-    ]).then(([THREE, { OrbitControls }, { GLTFLoader }, { RoomEnvironment }]) => ({
+      import('three/addons/geometries/RoundedBoxGeometry.js'),
+    ]).then(([THREE, { OrbitControls }, { GLTFLoader }, { RoomEnvironment }, { RoundedBoxGeometry }]) => ({
       THREE,
       OrbitControls,
       GLTFLoader,
       RoomEnvironment,
+      RoundedBoxGeometry,
     }))
   }
   return carregamento
 }
 
-// Carrega um .glb/.gltf, centraliza no chão (y=0) e normaliza o tamanho pra
-// caber bem no cartão do hero, não importa o tamanho real do modelo original.
-async function carregarModelo(THREE, GLTFLoader, item) {
-  const loader = new GLTFLoader()
-  const url = `${import.meta.env.BASE_URL}${item.arquivo}`
-  const gltf = await loader.loadAsync(url)
-  const modelo = gltf.scene
+// Carrega o .glb/.gltf (ou monta a cena em código), centraliza no chão (y=0)
+// e normaliza o tamanho pra caber bem no cartão do hero.
+async function carregarModelo(ctx, item) {
+  const { THREE, GLTFLoader } = ctx
+  let modelo
+  if (item.criar) {
+    modelo = await item.criar(ctx)
+  } else {
+    const gltf = await new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}${item.arquivo}`)
+    modelo = gltf.scene
+  }
 
   const caixa = new THREE.Box3().setFromObject(modelo)
   const tamanho = new THREE.Vector3()
@@ -59,12 +73,14 @@ async function carregarModelo(THREE, GLTFLoader, item) {
   modelo.scale.setScalar(escala)
   modelo.position.set(-centro.x * escala, -caixa.min.y * escala, -centro.z * escala)
 
-  modelo.traverse((filho) => {
-    if (filho.isMesh) {
-      filho.castShadow = true
-      filho.receiveShadow = true
-    }
-  })
+  if (!item.criar) {
+    modelo.traverse((filho) => {
+      if (filho.isMesh) {
+        filho.castShadow = true
+        filho.receiveShadow = true
+      }
+    })
+  }
 
   return { item, modelo, alturaModelo: tamanho.y * escala }
 }
@@ -99,20 +115,43 @@ function criarControles(visual, itensCarregados) {
 // `container`: elemento vazio onde o canvas entra. Retorna sem fazer nada
 // (o CSS mostra o desenho técnico como alternativa) se o three.js não
 // carregar, nenhum modelo baixar ou o WebGL falhar.
+// WebGL emulado por software (sem placa de vídeo) deixa a cena 3D lentíssima
+// e trava a página; nesses aparelhos fica o desenho técnico de reserva.
+// `?3d=forcar` na URL pula a checagem (útil para testes).
+function webglPorSoftware() {
+  if (new URLSearchParams(location.search).get('3d') === 'forcar') return false
+  try {
+    const gl = document.createElement('canvas').getContext('webgl')
+    if (!gl) return true
+    const info = gl.getExtension('WEBGL_debug_renderer_info')
+    const nome = info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
+    return /swiftshader|llvmpipe|software|basic render/i.test(String(nome))
+  } catch {
+    return true
+  }
+}
+
 export async function iniciarHero3D(container) {
   if (!container) return
+  if (webglPorSoftware()) {
+    container.dataset.erro3d = ''
+    return
+  }
   const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  let THREE, OrbitControls, GLTFLoader, RoomEnvironment
+  let ctx
   try {
-    ;({ THREE, OrbitControls, GLTFLoader, RoomEnvironment } = await carregarThree())
+    ctx = await carregarThree()
   } catch {
     container.dataset.erro3d = ''
     return
   }
   if (!container.isConnected) return
+  const { THREE, OrbitControls, RoomEnvironment } = ctx
 
-  const resultados = await Promise.allSettled(ITENS.map((item) => carregarModelo(THREE, GLTFLoader, item)))
+  const resultados = await Promise.allSettled(ITENS.map((item) => carregarModelo(ctx, item)))
+  resultados.forEach((r) => r.status === 'rejected' && console.warn('Peça 3D não carregou:', r.reason))
   const itensCarregados = resultados.filter((r) => r.status === 'fulfilled').map((r) => r.value)
   if (itensCarregados.length === 0) {
     container.dataset.erro3d = ''
@@ -131,14 +170,12 @@ export async function iniciarHero3D(container) {
   const cena = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 30)
   const alvo = new THREE.Vector3(0, 0, 0)
-  const azimute = -0.5
-  const polar = 1.25
-  const raioFinal = 6.4
-  const raioInicial = 8.8
+  let { azimute, polar, raio: raioFinal } = CAMERA_PADRAO
+  let raioInicial = raioFinal + 2.4
 
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
   renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.05
@@ -177,10 +214,13 @@ export async function iniciarHero3D(container) {
   controles.enableDamping = true
   controles.dampingFactor = 0.08
   controles.rotateSpeed = 0.5
-  controles.minAzimuthAngle = azimute - 0.7
-  controles.maxAzimuthAngle = azimute + 0.7
-  controles.minPolarAngle = polar - 0.2
-  controles.maxPolarAngle = polar + 0.2
+  const limitarControles = () => {
+    controles.minAzimuthAngle = azimute - 0.7
+    controles.maxAzimuthAngle = azimute + 0.7
+    controles.minPolarAngle = polar - 0.2
+    controles.maxPolarAngle = polar + 0.2
+  }
+  limitarControles()
 
   const ajustarTamanho = () => {
     const { clientWidth: w, clientHeight: h } = container
@@ -196,19 +236,21 @@ export async function iniciarHero3D(container) {
     renderer.render(cena, camera)
   }
 
+  // Só desenha quando algo muda (arraste, inércia do arraste, troca de peça),
+  // em vez de redesenhar a cada quadro — poupa bateria e processador no celular.
   let visivel = false
   let quadro = null
   const loop = () => {
-    if (!visivel) {
-      quadro = null
-      return
-    }
-    renderizar()
-    quadro = requestAnimationFrame(loop)
+    quadro = null
+    if (!visivel) return
+    const mudou = controles.update()
+    renderer.render(cena, camera)
+    if (mudou) quadro = requestAnimationFrame(loop)
   }
   const iniciarLoop = () => {
-    if (quadro === null) quadro = requestAnimationFrame(loop)
+    if (quadro === null && visivel) quadro = requestAnimationFrame(loop)
   }
+  controles.addEventListener('change', iniciarLoop)
 
   // --- Troca de peça (câmera se afasta, troca o modelo, se aproxima de novo) ---
   let grupoAtual = null
@@ -224,7 +266,13 @@ export async function iniciarHero3D(container) {
     if (grupoAtual) cena.remove(grupoAtual)
     grupoAtual = modelo
     cena.add(grupoAtual)
-    alvo.set(0, alturaModelo * 0.42, 0)
+    const cam = { ...CAMERA_PADRAO, ...item.camera }
+    ;({ azimute, polar } = cam)
+    raioFinal = cam.raio
+    raioInicial = cam.raio + 2.4
+    limitarControles()
+    renderer.toneMappingExposure = cam.exposicao
+    alvo.set(0, alturaModelo * cam.alvo, 0)
     controles.target.copy(alvo)
 
     const visual = container.closest('.hero__visual')

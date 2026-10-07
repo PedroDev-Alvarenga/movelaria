@@ -26,18 +26,25 @@ export function Processo() {
     <section class="secao processo" id="como-funciona" aria-labelledby="processo-titulo">
       <div class="container">
         <header class="processo__topo revelar">
-          ${rotulo('Como funciona')}
-          <h2 id="processo-titulo">Do primeiro papo ao móvel montado.</h2>
+          <div>
+            ${rotulo('Como funciona')}
+            <h2 id="processo-titulo">Do primeiro papo ao móvel montado.</h2>
+          </div>
+          <p>Um trabalho sob medida tem etapas. A gente acompanha você em todas elas.</p>
         </header>
 
-        <ol class="processo__lista">
+        <ol class="processo__lista revelar">
           ${passos
             .map(
               (p, i) => `
-            <li class="passo revelar">
-              <span class="passo__numero" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
-              <h3 class="passo__titulo">${p.titulo}</h3>
-              <p>${p.texto}</p>
+            <li class="passo">
+              <span class="passo__regua" aria-hidden="true">
+                <span class="passo__numero">${String(i + 1).padStart(2, '0')}</span>
+              </span>
+              <div class="passo__corpo">
+                <h3 class="passo__titulo">${p.titulo}</h3>
+                <p>${p.texto}</p>
+              </div>
             </li>`,
             )
             .join('')}

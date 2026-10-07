@@ -538,25 +538,34 @@ body.menu-aberto {
 .hero__carrossel-pontos {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
 }
 
+/* a bolinha continua com 9px, mas a área de toque tem 24px */
 .hero__carrossel-ponto {
-  width: 9px;
-  height: 9px;
+  position: relative;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.hero__carrossel-ponto::before {
+  content: '';
+  position: absolute;
+  inset: 7.5px;
   border-radius: 50%;
   background: var(--borda);
-  cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
 }
 
-.hero__carrossel-ponto:hover {
+.hero__carrossel-ponto:hover::before {
   background: var(--madeira);
 }
 
-.hero__carrossel-ponto[aria-current='true'] {
+.hero__carrossel-ponto[aria-current='true']::before {
   background: var(--marinho);
   transform: scale(1.25);
 }

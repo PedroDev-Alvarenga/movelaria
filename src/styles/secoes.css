@@ -400,18 +400,21 @@
   }
 }
 
-/* ============ Como funciona: faixa sálvia ============ */
+/* ============ Como funciona: régua de marceneiro como linha do tempo ============ */
 
 .processo {
-  background: var(--salvia-clara);
+  background: var(--creme);
 }
 
 .processo__topo {
+  display: grid;
+  gap: 16px;
   margin-bottom: 48px;
 }
 
-.processo .rotulo {
-  color: var(--salvia-texto);
+.processo__topo > p {
+  max-width: 28em;
+  color: var(--texto-suave);
 }
 
 .processo__lista {
@@ -421,29 +424,70 @@
   list-style: none;
 }
 
+/* No celular a régua fica em pé, à esquerda; cada etapa tem o seu trecho
+   e os trechos se encostam formando uma régua contínua. */
 .passo {
-  padding: 24px 0;
-  border-top: 1px solid rgb(20 34 79 / 22%);
+  display: grid;
+  grid-template-columns: 46px 1fr;
+}
+
+.passo__regua {
+  --tinta: rgb(92 58 22 / 70%);
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 6px 0 0;
+  background-color: #e3c387;
+  background-image:
+    repeating-linear-gradient(180deg, var(--tinta) 0 1px, transparent 1px 10px),
+    repeating-linear-gradient(180deg, var(--tinta) 0 1.5px, transparent 1.5px 50px);
+  background-size:
+    9px 100%,
+    17px 100%;
+  background-repeat: no-repeat;
+}
+
+.passo:first-child .passo__regua {
+  border-radius: 3px 3px 0 0;
+}
+
+.passo:last-child .passo__regua {
+  border-radius: 0 0 3px 3px;
+}
+
+/* marca da etapa: traço azul atravessando a régua */
+.passo__regua::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: -14px;
+  height: 2px;
+  background: var(--marinho);
 }
 
 .passo__numero {
-  display: block;
-  margin-bottom: 16px;
-  font-family: var(--fonte-destaque);
-  font-style: italic;
-  font-size: 2.5rem;
+  font-family: var(--fonte-titulo);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
   line-height: 1;
-  color: var(--salvia-texto);
+  color: #4a2f12;
+}
+
+.passo__corpo {
+  padding: 0 0 36px 22px;
 }
 
 .passo__titulo {
-  margin-bottom: 8px;
+  margin: -4px 0 8px;
   font-size: var(--fs-lg);
 }
 
-.passo p {
+.passo__corpo p {
   max-width: 26em;
-  color: #3d4639;
+  color: var(--texto-suave);
   font-size: var(--fs-sm);
 }
 
@@ -451,32 +495,68 @@
   margin-top: 40px;
 }
 
-@media (min-width: 640px) {
-  .processo__lista {
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 40px;
+@media (min-width: 900px) {
+  .processo__topo {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: 64px;
+    margin-bottom: 56px;
   }
-}
 
-@media (min-width: 1040px) {
+  .processo__topo > p {
+    justify-self: end;
+  }
+
+  /* No desktop a régua fica deitada, atravessando as 4 etapas */
   .processo__lista {
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 0;
   }
 
   .passo {
-    padding: 8px 28px 8px;
-    border-top: 0;
-    border-left: 1px solid rgb(20 34 79 / 22%);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
   }
 
-  .passo:first-child {
-    padding-left: 0;
-    border-left: 0;
+  .passo__regua {
+    height: 48px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 0 0 8px 12px;
+    background-image:
+      repeating-linear-gradient(90deg, var(--tinta) 0 1px, transparent 1px 10px),
+      repeating-linear-gradient(90deg, var(--tinta) 0 1.5px, transparent 1.5px 50px);
+    background-size:
+      100% 10px,
+      100% 18px;
+  }
+
+  .passo:first-child .passo__regua {
+    border-radius: 3px 0 0 3px;
+  }
+
+  .passo:last-child .passo__regua {
+    border-radius: 0 3px 3px 0;
+  }
+
+  .passo__regua::after {
+    top: 0;
+    bottom: -20px;
+    left: 0;
+    right: auto;
+    width: 2px;
+    height: auto;
   }
 
   .passo__numero {
-    margin-bottom: 40px;
+    font-size: 0.875rem;
+  }
+
+  .passo__corpo {
+    padding: 36px 32px 0 0;
+  }
+
+  .passo__titulo {
+    margin-top: 0;
   }
 }
 
