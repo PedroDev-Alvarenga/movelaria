@@ -163,7 +163,7 @@
 .planta .solto * {
   fill: none;
   stroke: #14224f;
-  stroke-opacity: 0.45;
+  stroke-opacity: 0.32;
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
 }
@@ -226,36 +226,12 @@
   vector-effect: non-scaling-stroke;
 }
 
-.planta .cota text,
-.planta .escala text,
-.planta .norte text {
+.planta .cota text {
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.04em;
   fill: var(--madeira-texto);
   stroke: none;
-}
-
-.planta .escala rect {
-  fill: #fbf8f2;
-  stroke: #14224f;
-  stroke-width: 1px;
-  vector-effect: non-scaling-stroke;
-}
-
-.planta .escala .cheio {
-  fill: #14224f;
-}
-
-.planta .norte circle {
-  fill: none;
-  stroke: #14224f;
-  stroke-width: 1px;
-  vector-effect: non-scaling-stroke;
-}
-
-.planta .norte path {
-  fill: #14224f;
 }
 
 /* --- interação --- */
@@ -351,9 +327,7 @@
 
 /* no celular: só a planta (sem cotas, escala e norte) e só o nome do cômodo ativo */
 @media (max-width: 599px) {
-  .planta .cota,
-  .planta .escala,
-  .planta .norte {
+  .planta .cota {
     display: none;
   }
 
@@ -759,34 +733,73 @@
   }
 }
 
-/* ============ Sobre: "25" tipográfico ============ */
+/* ============ Sobre: foto de projeto + placa da fachada ============ */
 
 .sobre__grade {
   display: grid;
-  gap: 24px;
+  gap: 56px;
+  align-items: center;
 }
 
-.sobre__anos {
+.sobre__visual {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding-bottom: 56px;
+}
+
+.sobre__foto {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--raio-foto);
+}
+
+/* placa ripada, como a fachada e a foto de perfil da loja */
+.sobre__placa {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
   display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  line-height: 0.8;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(72%, 300px);
+  padding: 34px 20px 24px;
+  border-radius: 2px;
+  background-color: var(--grafite);
+  background-image: var(--ripado);
+  box-shadow: 0 18px 40px rgb(30 24 16 / 28%);
+  color: var(--branco);
 }
 
-.sobre__anos-numero {
+/* fita de LED quente acima do letreiro */
+.sobre__placa::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 14%;
+  right: 14%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--led), transparent);
+  box-shadow: 0 6px 18px 2px rgb(255 213 138 / 45%);
+}
+
+.sobre__placa-marca {
+  margin-right: -0.32em;
   font-family: var(--fonte-titulo);
-  font-weight: 800;
-  font-size: clamp(7rem, 4rem + 16vw, 17rem);
-  letter-spacing: -0.06em;
-  color: var(--madeira);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.6rem);
+  letter-spacing: 0.32em;
 }
 
-.sobre__anos-texto {
-  padding-bottom: 0.6em;
-  font-family: var(--fonte-destaque);
-  font-style: italic;
-  font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  color: var(--madeira-texto);
+.sobre__placa-sub {
+  font-family: var(--fonte-titulo);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--madeira-clara);
 }
 
 .sobre__texto h2 {
@@ -794,7 +807,7 @@
 }
 
 .sobre__texto p:not(.rotulo) {
-  max-width: 36em;
+  max-width: 34em;
   color: var(--texto-suave);
 }
 
@@ -804,50 +817,75 @@
 
 .sobre__texto .sobre__abre {
   font-size: var(--fs-lg);
-  color: var(--texto);
   line-height: 1.55;
+  color: var(--texto);
 }
 
-.sobre__lista {
-  margin: 36px 0 0;
-  border-top: 1px solid var(--linha);
-}
-
-.sobre__lista div {
+.sobre__fatos {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 16px;
-  padding: 14px 0;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 40px 0 28px;
+  border-top: 1px solid var(--linha);
   border-bottom: 1px solid var(--linha);
 }
 
-.sobre__lista dt {
+.sobre__fatos div {
+  padding: 20px 16px 20px 0;
+}
+
+.sobre__fatos div + div {
+  padding-left: 20px;
+  border-left: 1px solid var(--linha);
+}
+
+.sobre__fatos dt {
   font-family: var(--fonte-titulo);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: clamp(1.3rem, 1rem + 1vw, 1.75rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  white-space: nowrap;
   color: var(--marinho);
 }
 
-.sobre__lista dd {
-  margin: 0;
+.sobre__fatos dd {
+  margin: 6px 0 0;
+  font-size: var(--fs-sm);
+  line-height: 1.4;
   color: var(--texto-suave);
+}
+
+@media (max-width: 559px) {
+  .sobre__fatos {
+    grid-template-columns: 1fr;
+  }
+
+  .sobre__fatos div,
+  .sobre__fatos div + div {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 0;
+    border-left: 0;
+  }
+
+  .sobre__fatos div + div {
+    border-top: 1px solid var(--linha);
+  }
+
+  .sobre__fatos dd {
+    margin: 0;
+  }
 }
 
 @media (min-width: 900px) {
   .sobre__grade {
-    grid-template-columns: 5fr 7fr;
-    gap: 64px;
-    align-items: start;
+    grid-template-columns: 5fr 6fr;
+    gap: 88px;
   }
 
-  .sobre__anos {
-    position: sticky;
-    top: calc(var(--header-altura) + 40px);
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .sobre__anos-texto {
-    padding: 0 0 0 0.3em;
+  .sobre__placa {
+    right: -40px;
   }
 }
 

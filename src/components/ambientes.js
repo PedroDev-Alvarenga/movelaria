@@ -2,7 +2,7 @@ import { ambientes } from '../data/ambientes.js'
 import { whatsappLink, mensagemAmbiente } from '../utils/whatsapp.js'
 import { icones } from './icones.js'
 import { rotulo } from './rotulo.js'
-import { plantaSVG } from './planta.js'
+import { plantaSVG, VIEWBOX_PLANTA, VIEWBOX_PLANTA_CELULAR } from './planta.js'
 
 const total = String(ambientes.length).padStart(2, '0')
 
@@ -104,7 +104,7 @@ export function iniciarAmbientes() {
   // no celular a planta ocupa a largura toda, sem a margem das cotas
   const celular = window.matchMedia('(max-width: 599px)')
   const ajustarEnquadramento = () =>
-    planta.setAttribute('viewBox', celular.matches ? '-8 -8 1016 756' : '-95 -95 1140 925')
+    planta.setAttribute('viewBox', celular.matches ? VIEWBOX_PLANTA_CELULAR : VIEWBOX_PLANTA)
   celular.addEventListener('change', ajustarEnquadramento)
   ajustarEnquadramento()
 
