@@ -167,13 +167,19 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           <p class="hero__credito" data-credito-hero hidden></p>
         </figure>
       </div>
-    </section>`}function B(){let e=document.querySelector(`[data-desenho]`);e&&requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add(`desenhar`)));let t=document.querySelector(`[data-hero-3d]`);t&&L(t)}var V=[{id:`cozinha`,nome:`Cozinha`,frase:`Armários, bancadas e nichos pensados para a rotina de quem cozinha.`,mensagem:`uma cozinha planejada`,icone:`cozinha`},{id:`closet`,nome:`Closet`,frase:`Cada peça no seu lugar, com organização feita para você.`,mensagem:`um closet sob medida`,icone:`closet`},{id:`quarto`,nome:`Quarto`,frase:`Quartos de casal, de solteiro e infantis com o aproveitamento de cada canto.`,mensagem:`um quarto planejado`,icone:`quarto`},{id:`home-office`,nome:`Home office`,frase:`Um canto de trabalho funcional, que conversa com o resto da casa.`,mensagem:`um home office planejado`,icone:`office`},{id:`sala`,nome:`Sala (painéis e racks)`,frase:`Painéis, racks e iluminação para deixar a sala mais acolhedora.`,mensagem:`painel ou rack para a sala`,icone:`sala`},{id:`banheiro`,nome:`Banheiro`,frase:`Gabinetes e armários sob medida, mesmo nos espaços menores.`,mensagem:`móveis para banheiro`,icone:`banheiro`},{id:`sala-de-jantar`,nome:`Sala de jantar`,frase:`Ambientes para reunir a família em volta da mesa.`,mensagem:`uma sala de jantar`,icone:`jantar`},{id:`mesas`,nome:`Mesas sob medida`,frase:`Mesas feitas no tamanho certo para o seu espaço.`,mensagem:`uma mesa sob medida`,icone:`mesa`},{id:`estofados`,nome:`Estofados sob medida`,frase:`Estofados feitos sob medida para o seu ambiente.`,mensagem:`estofados sob medida`,icone:`estofado`}];function H(e,t=``){return`<p class="rotulo ${t}">${e}</p>`}function U(e,t,n){let r=e=>`<path d="M${e-7} ${t+7}L${e+7} ${t-7}"/>`,i=`<path d="M${e[0]-15} ${t}H${e[e.length-1]+15}"/>`,a=n.map((n,r)=>`<text x="${(e[r]+e[r+1])/2}" y="${t-12}" text-anchor="middle">${n}</text>`).join(``);return`<g class="cota">${i}${e.map(r).join(``)}${a}</g>`}function W(e,t,n){let r=e=>`<path d="M${t-7} ${e+7}L${t+7} ${e-7}"/>`,i=`<path d="M${t} ${e[0]-15}V${e[e.length-1]+15}"/>`,a=n.map((n,r)=>{let i=(e[r]+e[r+1])/2;return`<text x="${t-12}" y="${i}" text-anchor="middle" transform="rotate(-90 ${t-12} ${i})">${n}</text>`}).join(``);return`<g class="cota">${i}${e.map(r).join(``)}${a}</g>`}function G(e,t,n){return`<rect class="vao" x="${e}" y="${n}" width="${t-e}" height="15"/>
-    <path class="esquadria" d="M${e} ${n+2}H${t}M${e} ${n+7.5}H${t}M${e} ${n+13}H${t}M${e} ${n}V${n+15}M${t} ${n}V${n+15}"/>`}function K(e,t,n){return`<rect class="vao" x="${n}" y="${e}" width="15" height="${t-e}"/>
-    <path class="esquadria" d="M${n+2} ${e}V${t}M${n+7.5} ${e}V${t}M${n+13} ${e}V${t}M${n} ${e}H${n+15}M${n} ${t}H${n+15}"/>`}function q(){return`
-  <svg class="planta" viewBox="-95 -95 1140 925" aria-hidden="true" focusable="false">
+    </section>`}function B(){let e=document.querySelector(`[data-desenho]`);e&&requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add(`desenhar`)));let t=document.querySelector(`[data-hero-3d]`);t&&L(t)}var V=[{id:`cozinha`,nome:`Cozinha`,frase:`Armários, bancadas e nichos pensados para a rotina de quem cozinha.`,mensagem:`uma cozinha planejada`,icone:`cozinha`},{id:`closet`,nome:`Closet`,frase:`Cada peça no seu lugar, com organização feita para você.`,mensagem:`um closet sob medida`,icone:`closet`},{id:`quarto`,nome:`Quarto`,frase:`Quartos de casal, de solteiro e infantis com o aproveitamento de cada canto.`,mensagem:`um quarto planejado`,icone:`quarto`},{id:`home-office`,nome:`Home office`,frase:`Um canto de trabalho funcional, que conversa com o resto da casa.`,mensagem:`um home office planejado`,icone:`office`},{id:`sala`,nome:`Sala (painéis e racks)`,frase:`Painéis, racks e iluminação para deixar a sala mais acolhedora.`,mensagem:`painel ou rack para a sala`,icone:`sala`},{id:`banheiro`,nome:`Banheiro`,frase:`Gabinetes e armários sob medida, mesmo nos espaços menores.`,mensagem:`móveis para banheiro`,icone:`banheiro`},{id:`sala-de-jantar`,nome:`Sala de jantar`,frase:`Ambientes para reunir a família em volta da mesa.`,mensagem:`uma sala de jantar`,icone:`jantar`},{id:`mesas`,nome:`Mesas sob medida`,frase:`Mesas feitas no tamanho certo para o seu espaço.`,mensagem:`uma mesa sob medida`,icone:`mesa`},{id:`estofados`,nome:`Estofados sob medida`,frase:`Estofados feitos sob medida para o seu ambiente.`,mensagem:`estofados sob medida`,icone:`estofado`}];function H(e,t=``){return`<p class="rotulo ${t}">${e}</p>`}function U(e,t,n,r){return`<g class="cota">
+    <path d="M${e-15} ${n}H${t+15}M${e-7} ${n+7}L${e+7} ${n-7}M${t-7} ${n+7}L${t+7} ${n-7}"/>
+    <text x="${(e+t)/2}" y="${n-12}" text-anchor="middle">${r}</text>
+  </g>`}function W(e,t,n,r){let i=(e+t)/2;return`<g class="cota">
+    <path d="M${n} ${e-15}V${t+15}M${n-7} ${e+7}L${n+7} ${e-7}M${n-7} ${t+7}L${n+7} ${t-7}"/>
+    <text x="${n-12}" y="${i}" text-anchor="middle" transform="rotate(-90 ${n-12} ${i})">${r}</text>
+  </g>`}function G(e,t,n){return`<rect class="vao" x="${e}" y="${n}" width="${t-e}" height="15"/>
+    <path class="esquadria" d="M${e} ${n+3}H${t}M${e} ${n+12}H${t}M${e} ${n}V${n+15}M${t} ${n}V${n+15}"/>`}function K(e,t,n){return`<rect class="vao" x="${n}" y="${e}" width="15" height="${t-e}"/>
+    <path class="esquadria" d="M${n+3} ${e}V${t}M${n+12} ${e}V${t}M${n} ${e}H${n+15}M${n} ${t}H${n+15}"/>`}var q=`-70 -70 1100 800`,J=`-8 -8 1016 736`;function oe(){return`
+  <svg class="planta" viewBox="${q}" aria-hidden="true" focusable="false">
     <defs>
-      <pattern id="piso-molhado" width="30" height="30" patternUnits="userSpaceOnUse">
-        <path d="M30 0H0V30" fill="none" stroke="#14224f" stroke-opacity=".09" stroke-width="1"/>
+      <pattern id="piso-molhado" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M40 0H0V40" fill="none" stroke="#14224f" stroke-opacity=".07" stroke-width="1"/>
       </pattern>
       <pattern id="veio" width="60" height="18" patternUnits="userSpaceOnUse">
         <rect width="60" height="18" fill="#d6b07a"/>
@@ -181,169 +187,118 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
       </pattern>
     </defs>
 
-    <!-- ambientes: piso, móveis e nome -->
     <g class="comodo" data-amb="quarto">
-      <rect class="piso" x="15" y="15" width="360" height="340"/>
-      <rect class="marc" x="60" y="15" width="270" height="9"/>
-      <rect class="marc" x="70" y="24" width="45" height="40"/>
-      <rect class="marc" x="275" y="24" width="45" height="40"/>
-      <rect class="marc" x="352" y="170" width="23" height="160"/>
+      <rect class="piso" x="15" y="15" width="400" height="330"/>
+      <rect class="marc" x="95" y="15" width="240" height="9"/>
+      <rect class="marc" x="98" y="24" width="44" height="40"/>
+      <rect class="marc" x="288" y="24" width="44" height="40"/>
       <g class="solto">
-        <rect x="120" y="24" width="150" height="200" rx="3"/>
-        <rect x="130" y="34" width="60" height="30" rx="8"/>
-        <rect x="200" y="34" width="60" height="30" rx="8"/>
-        <path d="M120 96H270M120 104H270"/>
+        <rect x="146" y="24" width="138" height="200" rx="3"/>
+        <path d="M146 100H284"/>
       </g>
-      <text x="195" y="292" text-anchor="middle">Quarto</text>
+      <text x="215" y="292" text-anchor="middle">Quarto</text>
     </g>
 
     <g class="comodo" data-amb="closet">
-      <rect class="piso" x="385" y="15" width="190" height="160"/>
-      <rect class="marc" x="385" y="15" width="190" height="55"/>
-      <rect class="marc" x="520" y="70" width="55" height="105"/>
-      <path class="solto tracejado" d="M395 42H565"/>
-      <text x="452" y="132" text-anchor="middle">Closet</text>
+      <rect class="piso" x="425" y="15" width="190" height="150"/>
+      <rect class="marc" x="425" y="15" width="190" height="55"/>
+      <rect class="marc" x="560" y="70" width="55" height="95"/>
+      <text x="490" y="124" text-anchor="middle">Closet</text>
     </g>
 
     <g class="comodo" data-amb="banheiro">
-      <rect class="piso" x="385" y="185" width="190" height="170"/>
-      <rect class="hachura" x="385" y="185" width="190" height="170"/>
-      <rect class="marc" x="515" y="190" width="60" height="80"/>
+      <rect class="piso" x="425" y="175" width="190" height="170"/>
+      <rect class="hachura" x="425" y="175" width="190" height="170"/>
+      <rect class="marc" x="425" y="175" width="78" height="50"/>
       <g class="solto">
-        <path d="M490 185V270H385"/>
-        <circle cx="437" cy="228" r="6"/>
-        <ellipse cx="545" cy="230" rx="17" ry="13"/>
-        <rect x="562" y="300" width="12" height="36" rx="2"/>
-        <ellipse cx="543" cy="318" rx="19" ry="15"/>
+        <ellipse cx="464" cy="200" rx="18" ry="13"/>
+        <path d="M535 175V265H615"/>
+        <rect x="427" y="282" width="12" height="36" rx="2"/>
+        <ellipse cx="456" cy="300" rx="17" ry="14"/>
       </g>
-      <text x="482" y="310" text-anchor="middle">Banho</text>
+      <text x="490" y="254" text-anchor="middle">Banho</text>
     </g>
 
     <g class="comodo" data-amb="home-office">
-      <rect class="piso" x="585" y="15" width="230" height="340"/>
-      <rect class="marc" x="585" y="15" width="230" height="60"/>
-      <rect class="marc" x="775" y="110" width="40" height="180"/>
-      <g class="solto">
-        <circle cx="690" cy="108" r="22"/>
-        <path class="tracejado" d="M590 46H810"/>
-      </g>
-      <text x="680" y="232" text-anchor="middle">Home office</text>
-    </g>
-
-    <g class="comodo comodo--fixo">
-      <rect class="piso" x="825" y="15" width="160" height="340"/>
-      <rect class="hachura" x="825" y="15" width="160" height="340"/>
-      <g class="solto">
-        <rect x="925" y="22" width="55" height="48" rx="3"/><rect x="933" y="30" width="39" height="32" rx="6"/>
-        <rect x="925" y="82" width="55" height="55" rx="3"/><circle cx="952.5" cy="109.5" r="19"/>
-      </g>
-      <text x="905" y="232" text-anchor="middle">Área de</text>
-      <text x="905" y="256" text-anchor="middle">serviço</text>
+      <rect class="piso" x="625" y="15" width="360" height="330"/>
+      <rect class="marc" x="645" y="15" width="320" height="60"/>
+      <rect class="marc" x="945" y="120" width="40" height="170"/>
+      <g class="solto"><circle cx="805" cy="112" r="24"/></g>
+      <text x="805" y="232" text-anchor="middle">Home office</text>
     </g>
 
     <g class="comodo" data-amb="sala">
-      <rect class="piso" x="15" y="365" width="485" height="360"/>
-      <rect class="marc" x="70" y="365" width="360" height="45"/>
-      <g class="solto">
-        <path d="M150 373H350"/>
-        <rect class="tracejado" x="88" y="468" width="304" height="236"/>
-        <circle cx="250" cy="545" r="34"/>
-      </g>
+      <rect class="piso" x="15" y="355" width="455" height="350"/>
+      <rect class="marc" x="70" y="355" width="340" height="45"/>
       <g class="peca peca--estofado" data-peca="estofados">
-        <path d="M100 520H185V610H360V695H100Z"/>
-        <path class="costura" d="M118 520V677H360M185 610V695M272 610V695"/>
+        <path d="M110 515H195V600H380V685H110Z"/>
+        <path class="costura" d="M128 515V667H380M195 600V685M288 600V685"/>
       </g>
-      <text x="250" y="447" text-anchor="middle">Sala</text>
+      <text x="240" y="460" text-anchor="middle">Sala</text>
     </g>
 
     <g class="comodo" data-amb="sala-de-jantar">
-      <rect class="piso" x="500" y="365" width="230" height="360"/>
-      <rect class="marc" x="530" y="365" width="170" height="40"/>
+      <rect class="piso" x="470" y="355" width="250" height="350"/>
+      <rect class="marc" x="505" y="355" width="180" height="40"/>
       <g class="solto">
-        <rect x="512" y="515" width="38" height="38" rx="6"/><rect x="512" y="572" width="38" height="38" rx="6"/><rect x="512" y="629" width="38" height="38" rx="6"/>
-        <rect x="680" y="515" width="38" height="38" rx="6"/><rect x="680" y="572" width="38" height="38" rx="6"/><rect x="680" y="629" width="38" height="38" rx="6"/>
+        <rect x="493" y="490" width="38" height="38" rx="6"/><rect x="493" y="541" width="38" height="38" rx="6"/><rect x="493" y="592" width="38" height="38" rx="6"/>
+        <rect x="659" y="490" width="38" height="38" rx="6"/><rect x="659" y="541" width="38" height="38" rx="6"/><rect x="659" y="592" width="38" height="38" rx="6"/>
       </g>
       <g class="peca peca--mesa" data-peca="mesas">
-        <rect x="555" y="500" width="120" height="180" rx="2"/>
+        <rect x="535" y="480" width="120" height="160" rx="2"/>
       </g>
-      <text x="615" y="447" text-anchor="middle">Jantar</text>
+      <text x="595" y="446" text-anchor="middle">Jantar</text>
     </g>
 
     <g class="comodo" data-amb="cozinha">
-      <rect class="piso" x="730" y="365" width="255" height="360"/>
-      <rect class="hachura" x="730" y="365" width="255" height="360"/>
-      <rect class="marc" x="925" y="440" width="60" height="270"/>
-      <rect class="marc" x="770" y="470" width="70" height="200"/>
+      <rect class="piso" x="720" y="355" width="265" height="350"/>
+      <rect class="hachura" x="720" y="355" width="265" height="350"/>
+      <rect class="marc" x="925" y="420" width="60" height="270"/>
+      <rect class="marc" x="770" y="480" width="70" height="170"/>
       <g class="solto">
-        <rect x="925" y="370" width="60" height="64" rx="2"/><path d="M925 370L985 434M985 370L925 434"/>
-        <rect x="935" y="500" width="40" height="66" rx="8"/>
-        <circle cx="943" cy="625" r="9"/><circle cx="967" cy="625" r="9"/><circle cx="943" cy="660" r="9"/><circle cx="967" cy="660" r="9"/>
-        <circle cx="751" cy="505" r="13"/><circle cx="751" cy="550" r="13"/><circle cx="751" cy="595" r="13"/><circle cx="751" cy="640" r="13"/>
-        <path class="tracejado" d="M950 440V710"/>
+        <rect x="925" y="362" width="60" height="52" rx="2"/>
+        <rect x="935" y="470" width="40" height="64" rx="8"/>
+        <circle cx="943" cy="600" r="9"/><circle cx="967" cy="600" r="9"/><circle cx="943" cy="632" r="9"/><circle cx="967" cy="632" r="9"/>
       </g>
-      <text x="855" y="420" text-anchor="middle">Cozinha</text>
+      <text x="848" y="436" text-anchor="middle">Cozinha</text>
     </g>
 
-    <!-- limites entre ambientes integrados -->
-    <path class="limite" d="M500 365V725M730 365V725"/>
+    <path class="limite" d="M470 355V705M720 355V705"/>
 
-    <!-- paredes (poche) -->
     <g class="parede">
       <rect x="0" y="0" width="1000" height="15"/>
-      <rect x="0" y="725" width="1000" height="15"/>
-      <rect x="0" y="0" width="15" height="740"/>
-      <rect x="985" y="0" width="15" height="740"/>
-      <rect x="15" y="355" width="970" height="10"/>
-      <rect x="375" y="15" width="10" height="340"/>
-      <rect x="575" y="15" width="10" height="340"/>
-      <rect x="815" y="15" width="10" height="340"/>
-      <rect x="385" y="175" width="190" height="10"/>
+      <rect x="0" y="705" width="1000" height="15"/>
+      <rect x="0" y="0" width="15" height="720"/>
+      <rect x="985" y="0" width="15" height="720"/>
+      <rect x="15" y="345" width="970" height="10"/>
+      <rect x="415" y="15" width="10" height="330"/>
+      <rect x="615" y="15" width="10" height="330"/>
+      <rect x="425" y="165" width="190" height="10"/>
     </g>
 
-    <!-- vãos de porta e passagens -->
     <g class="vaos">
-      <rect class="vao" x="270" y="355" width="80" height="10"/>
-      <rect class="vao" x="395" y="355" width="70" height="10"/>
-      <rect class="vao" x="600" y="355" width="80" height="10"/>
-      <rect class="vao" x="845" y="355" width="120" height="10"/>
-      <rect class="vao" x="375" y="40" width="10" height="80"/>
-      <rect class="vao" x="0" y="600" width="15" height="90"/>
+      <rect class="vao" x="320" y="345" width="80" height="10"/>
+      <rect class="vao" x="520" y="345" width="70" height="10"/>
+      <rect class="vao" x="640" y="345" width="80" height="10"/>
+      <rect class="vao" x="415" y="40" width="10" height="80"/>
+      <rect class="vao" x="0" y="580" width="15" height="90"/>
     </g>
     <g class="porta">
-      <path d="M350 355V275M270 355A80 80 0 0 1 350 275"/>
-      <path d="M395 355V285M465 355A70 70 0 0 0 395 285"/>
-      <path d="M600 355V275M680 355A80 80 0 0 0 600 275"/>
-      <path d="M15 690H105M15 600A90 90 0 0 1 105 690"/>
+      <path d="M400 345V265M320 345A80 80 0 0 1 400 265"/>
+      <path d="M590 345V275M520 345A70 70 0 0 1 590 275"/>
+      <path d="M640 345V265M720 345A80 80 0 0 0 640 265"/>
+      <path d="M15 670H105M15 580A90 90 0 0 1 105 670"/>
     </g>
 
-    <!-- janelas -->
-    ${G(110,290,0)}
-    ${G(630,770,0)}
-    ${G(870,950,0)}
-    ${G(90,430,725)}
-    ${G(560,700,725)}
-    ${K(470,610,985)}
+    ${G(140,290,0)}
+    ${G(700,900,0)}
+    ${G(120,400,705)}
+    ${G(525,665,705)}
+    ${K(440,600,985)}
 
-    <!-- cotas -->
-    ${U([0,380,580,820,1e3],-42,[`3,80`,`2,00`,`2,40`,`1,80`])}
-    ${W([0,360,740],-42,[`3,60`,`3,80`])}
-
-    <!-- escala gráfica e norte -->
-    <g class="escala">
-      <rect x="0" y="782" width="100" height="10" class="cheio"/>
-      <rect x="100" y="782" width="100" height="10"/>
-      <rect x="200" y="782" width="100" height="10" class="cheio"/>
-      <text x="0" y="816" text-anchor="middle">0</text>
-      <text x="100" y="816" text-anchor="middle">1</text>
-      <text x="200" y="816" text-anchor="middle">2</text>
-      <text x="312" y="816" text-anchor="middle">3 m</text>
-    </g>
-    <g class="norte" transform="translate(975 790)">
-      <circle r="24"/>
-      <path d="M0 -20L9 12L0 5L-9 12Z"/>
-      <text y="-30" text-anchor="middle">N</text>
-    </g>
-  </svg>`}var J=String(V.length).padStart(2,`0`);function oe(){let e=V[0];return`
+    ${U(0,1e3,-38,`10,00`)}
+    ${W(0,720,-38,`7,20`)}
+  </svg>`}var se=String(V.length).padStart(2,`0`);function ce(){let e=V[0];return`
     <section class="secao ambientes" id="ambientes" aria-labelledby="ambientes-titulo">
       <div class="container">
         <header class="ambientes__topo revelar">
@@ -356,7 +311,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
 
         <div class="ambientes__grade revelar">
           <figure class="ambientes__planta" data-planta>
-            ${q()}
+            ${oe()}
             <figcaption>
               <span class="legenda-marc" aria-hidden="true"></span> Marcenaria planejada
               <span class="ambientes__ilustrativa">Planta ilustrativa</span>
@@ -364,7 +319,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           </figure>
 
           <div class="ambientes__painel">
-            <p class="ambientes__contador" aria-hidden="true"><span data-amb-num>01</span> / ${J}</p>
+            <p class="ambientes__contador" aria-hidden="true"><span data-amb-num>01</span> / ${se}</p>
             <div aria-live="polite">
               <h3 class="ambientes__nome" data-amb-nome>${e.nome}</h3>
               <p class="ambientes__frase" data-amb-frase>${e.frase}</p>
@@ -380,7 +335,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           </div>
         </div>
       </div>
-    </section>`}function se(){let e=document.getElementById(`ambientes`);if(!e)return;let t=e.querySelector(`[data-planta] svg`),n=e.querySelector(`[data-amb-num]`),r=e.querySelector(`[data-amb-nome]`),i=e.querySelector(`[data-amb-frase]`),a=e.querySelector(`[data-amb-link]`),c=[...e.querySelectorAll(`[data-amb-opcao]`)],l=null,u={mesas:`sala-de-jantar`,estofados:`sala`};function d(e){if(e===l)return;let d=V.findIndex(t=>t.id===e);if(d<0)return;l=e;let f=V[d];t.querySelectorAll(`.ativo, .realce`).forEach(e=>e.classList.remove(`ativo`,`realce`));let p=t.querySelector(`[data-peca="${e}"]`);p?(p.classList.add(`ativo`),t.querySelector(`[data-amb="${u[e]}"]`)?.classList.add(`realce`)):t.querySelector(`[data-amb="${e}"]`)?.classList.add(`ativo`),n.textContent=String(d+1).padStart(2,`0`),r.textContent=f.nome,i.textContent=f.frase,a.href=o(s(f.mensagem)),c.forEach(t=>t.setAttribute(`aria-pressed`,String(t.dataset.ambOpcao===e)))}t.addEventListener(`pointerover`,e=>{let t=e.target.closest(`[data-peca], [data-amb]`);t&&d(t.dataset.peca||t.dataset.amb)}),t.addEventListener(`click`,e=>{let t=e.target.closest(`[data-peca], [data-amb]`);t&&d(t.dataset.peca||t.dataset.amb)}),c.forEach(e=>e.addEventListener(`click`,()=>d(e.dataset.ambOpcao)));let f=window.matchMedia(`(max-width: 599px)`),p=()=>t.setAttribute(`viewBox`,f.matches?`-8 -8 1016 756`:`-95 -95 1140 925`);f.addEventListener(`change`,p),p(),d(V[0].id)}var Y=e=>V.find(t=>t.id===e)?.nome??e,ce=8,X=m.filter(e=>e.arquivo);function le(){let t=V.filter(e=>X.some(t=>t.ambiente===e.id)),n=X.length>=ce&&t.length>1,r=X.some(e=>e.tipo===`render-3d`);return`
+    </section>`}function le(){let e=document.getElementById(`ambientes`);if(!e)return;let t=e.querySelector(`[data-planta] svg`),n=e.querySelector(`[data-amb-num]`),r=e.querySelector(`[data-amb-nome]`),i=e.querySelector(`[data-amb-frase]`),a=e.querySelector(`[data-amb-link]`),c=[...e.querySelectorAll(`[data-amb-opcao]`)],l=null,u={mesas:`sala-de-jantar`,estofados:`sala`};function d(e){if(e===l)return;let d=V.findIndex(t=>t.id===e);if(d<0)return;l=e;let f=V[d];t.querySelectorAll(`.ativo, .realce`).forEach(e=>e.classList.remove(`ativo`,`realce`));let p=t.querySelector(`[data-peca="${e}"]`);p?(p.classList.add(`ativo`),t.querySelector(`[data-amb="${u[e]}"]`)?.classList.add(`realce`)):t.querySelector(`[data-amb="${e}"]`)?.classList.add(`ativo`),n.textContent=String(d+1).padStart(2,`0`),r.textContent=f.nome,i.textContent=f.frase,a.href=o(s(f.mensagem)),c.forEach(t=>t.setAttribute(`aria-pressed`,String(t.dataset.ambOpcao===e)))}t.addEventListener(`pointerover`,e=>{let t=e.target.closest(`[data-peca], [data-amb]`);t&&d(t.dataset.peca||t.dataset.amb)}),t.addEventListener(`click`,e=>{let t=e.target.closest(`[data-peca], [data-amb]`);t&&d(t.dataset.peca||t.dataset.amb)}),c.forEach(e=>e.addEventListener(`click`,()=>d(e.dataset.ambOpcao)));let f=window.matchMedia(`(max-width: 599px)`),p=()=>t.setAttribute(`viewBox`,f.matches?J:q);f.addEventListener(`change`,p),p(),d(V[0].id)}var Y=e=>V.find(t=>t.id===e)?.nome??e,ue=8,X=m.filter(e=>e.arquivo);function de(){let t=V.filter(e=>X.some(t=>t.ambiente===e.id)),n=X.length>=ue&&t.length>1,r=X.some(e=>e.tipo===`render-3d`);return`
     <section class="secao galeria" id="projetos" aria-labelledby="projetos-titulo">
       <div class="container">
         <header class="galeria__topo revelar">
@@ -444,7 +399,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           </div>
         </div>
       </dialog>
-    </section>`}function ue(){let e=document.getElementById(`projetos`),t=e.querySelector(`[data-galeria]`),n=[...t.querySelectorAll(`.galeria__item:not(.galeria__item--insta)`)],r=e.querySelector(`[data-galeria-status]`),i=e.querySelector(`[data-lightbox]`),a=X.map((e,t)=>t),o=0,s=null;e.querySelectorAll(`[data-filtro]`).forEach(t=>{t.addEventListener(`click`,()=>{let i=t.dataset.filtro;e.querySelectorAll(`[data-filtro]`).forEach(e=>e.setAttribute(`aria-pressed`,String(e===t))),a=[],n.forEach((e,t)=>{let n=i===`todos`||e.dataset.ambiente===i;e.hidden=!n,n&&a.push(t)}),r.textContent=`${a.length} ${a.length===1?`projeto`:`projetos`} em ${t.textContent}`})});let c=i.querySelector(`[data-midia]`);function l(e){o=e;let t=X[e],n=Y(t.ambiente);c.innerHTML=g({arquivo:t.arquivo,alt:t.alt,largura:t.largura,altura:t.altura,lazy:!1,classe:`imagem--lightbox`,proporcaoReal:!0}),_(c),i.querySelector(`[data-titulo]`).textContent=t.titulo,i.querySelector(`[data-ambiente-lb]`).textContent=n+(t.tipo===`render-3d`?` · Projeto 3D`:``);let r=a.indexOf(e);i.querySelector(`[data-contador]`).textContent=`${r+1} / ${a.length}`}function u(e){let t=a.indexOf(o);l(a[(t+e+a.length)%a.length])}t.addEventListener(`click`,e=>{let t=e.target.closest(`[data-abrir]`);t&&(s=t,l(Number(t.dataset.abrir)),i.showModal(),i.querySelector(`[data-fechar]`).focus())}),i.querySelector(`[data-fechar]`).addEventListener(`click`,()=>i.close()),i.querySelector(`[data-anterior]`).addEventListener(`click`,()=>u(-1)),i.querySelector(`[data-proximo]`).addEventListener(`click`,()=>u(1)),i.addEventListener(`keydown`,e=>{e.key===`ArrowLeft`&&u(-1),e.key===`ArrowRight`&&u(1)}),i.addEventListener(`click`,e=>{e.target===i&&i.close()}),i.addEventListener(`close`,()=>{document.body.classList.remove(`lightbox-aberto`),s?.focus()}),i.addEventListener(`toggle`,()=>{i.open&&document.body.classList.add(`lightbox-aberto`)})}var de=[{titulo:`Conversa e medição`,texto:`Você conta como é a sua rotina e o que espera do ambiente. Depois, tiramos as medidas do espaço.`},{titulo:`Projeto`,texto:`Desenhamos o móvel pensando no uso de cada gaveta, nicho e porta — e ajustamos com você até ficar do seu jeito.`},{titulo:`Fabricação`,texto:`Com o projeto aprovado, os móveis são produzidos sob medida, com atenção ao acabamento.`},{titulo:`Entrega e montagem`,texto:`Levamos tudo até a sua casa e montamos no lugar certo, dentro do que foi combinado.`}];function fe(){return`
+    </section>`}function fe(){let e=document.getElementById(`projetos`),t=e.querySelector(`[data-galeria]`),n=[...t.querySelectorAll(`.galeria__item:not(.galeria__item--insta)`)],r=e.querySelector(`[data-galeria-status]`),i=e.querySelector(`[data-lightbox]`),a=X.map((e,t)=>t),o=0,s=null;e.querySelectorAll(`[data-filtro]`).forEach(t=>{t.addEventListener(`click`,()=>{let i=t.dataset.filtro;e.querySelectorAll(`[data-filtro]`).forEach(e=>e.setAttribute(`aria-pressed`,String(e===t))),a=[],n.forEach((e,t)=>{let n=i===`todos`||e.dataset.ambiente===i;e.hidden=!n,n&&a.push(t)}),r.textContent=`${a.length} ${a.length===1?`projeto`:`projetos`} em ${t.textContent}`})});let c=i.querySelector(`[data-midia]`);function l(e){o=e;let t=X[e],n=Y(t.ambiente);c.innerHTML=g({arquivo:t.arquivo,alt:t.alt,largura:t.largura,altura:t.altura,lazy:!1,classe:`imagem--lightbox`,proporcaoReal:!0}),_(c),i.querySelector(`[data-titulo]`).textContent=t.titulo,i.querySelector(`[data-ambiente-lb]`).textContent=n+(t.tipo===`render-3d`?` · Projeto 3D`:``);let r=a.indexOf(e);i.querySelector(`[data-contador]`).textContent=`${r+1} / ${a.length}`}function u(e){let t=a.indexOf(o);l(a[(t+e+a.length)%a.length])}t.addEventListener(`click`,e=>{let t=e.target.closest(`[data-abrir]`);t&&(s=t,l(Number(t.dataset.abrir)),i.showModal(),i.querySelector(`[data-fechar]`).focus())}),i.querySelector(`[data-fechar]`).addEventListener(`click`,()=>i.close()),i.querySelector(`[data-anterior]`).addEventListener(`click`,()=>u(-1)),i.querySelector(`[data-proximo]`).addEventListener(`click`,()=>u(1)),i.addEventListener(`keydown`,e=>{e.key===`ArrowLeft`&&u(-1),e.key===`ArrowRight`&&u(1)}),i.addEventListener(`click`,e=>{e.target===i&&i.close()}),i.addEventListener(`close`,()=>{document.body.classList.remove(`lightbox-aberto`),s?.focus()}),i.addEventListener(`toggle`,()=>{i.open&&document.body.classList.add(`lightbox-aberto`)})}var pe=[{titulo:`Conversa e medição`,texto:`Você conta como é a sua rotina e o que espera do ambiente. Depois, tiramos as medidas do espaço.`},{titulo:`Projeto`,texto:`Desenhamos o móvel pensando no uso de cada gaveta, nicho e porta — e ajustamos com você até ficar do seu jeito.`},{titulo:`Fabricação`,texto:`Com o projeto aprovado, os móveis são produzidos sob medida, com atenção ao acabamento.`},{titulo:`Entrega e montagem`,texto:`Levamos tudo até a sua casa e montamos no lugar certo, dentro do que foi combinado.`}];function me(){return`
     <section class="secao processo" id="como-funciona" aria-labelledby="processo-titulo">
       <div class="container">
         <header class="processo__topo revelar">
@@ -456,7 +411,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
         </header>
 
         <ol class="processo__lista revelar">
-          ${de.map((e,t)=>`
+          ${pe.map((e,t)=>`
             <li class="passo">
               <span class="passo__regua" aria-hidden="true">
                 <span class="passo__numero">${String(t+1).padStart(2,`0`)}</span>
@@ -474,29 +429,35 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           </a>
         </p>
       </div>
-    </section>`}function pe(){return`
+    </section>`}var he={arquivo:`quarto-home-office.jpg`,alt:`Quarto planejado pela Movelaria, com armários suspensos, painel de madeira e iluminação de LED`,largura:1080,altura:1350};function ge(){return`
     <section class="secao sobre" id="sobre" aria-labelledby="sobre-titulo">
       <div class="container sobre__grade">
-        <div class="sobre__anos revelar" aria-hidden="true">
-          <span class="sobre__anos-numero">${e.anos}</span>
-          <span class="sobre__anos-texto">anos</span>
+        <div class="sobre__visual revelar">
+          ${g({...he,classe:`sobre__foto`})}
+          <div class="sobre__placa" aria-hidden="true">
+            <span class="sobre__placa-marca">MOVELARIA</span>
+            <span class="sobre__placa-sub">Móveis planejados</span>
+          </div>
         </div>
 
         <div class="sobre__texto revelar">
           ${H(`Sobre a Movelaria`)}
-          <h2 id="sobre-titulo">Há ${e.anos} anos transformando sonhos em realidade.</h2>
-          <p class="sobre__abre">A Movelaria é uma loja de móveis em Guaíba que projeta e fabrica sob medida: móveis planejados para todos os ambientes, mesas e estofados.</p>
-          <p>Por aqui, cada projeto começa numa conversa. Queremos entender como você usa o espaço antes de desenhar qualquer coisa — porque um bom móvel planejado precisa ser bonito, mas também precisa funcionar no seu dia a dia.</p>
-          <p>Atendimento próximo, móveis de qualidade e compromisso com o que foi combinado: é isso que nossos clientes destacam, e é isso que a gente faz questão de manter.</p>
+          <h2 id="sobre-titulo">Há ${e.anos} anos transformando sonhos <span class="destaque">em realidade.</span></h2>
+          <p class="sobre__abre">Somos uma loja de móveis em Guaíba que projeta e fabrica sob medida: móveis planejados para todos os ambientes, mesas e estofados.</p>
+          <p>Cada projeto começa numa conversa. Antes de desenhar qualquer coisa, queremos entender como você usa o espaço — porque um bom móvel planejado precisa ser bonito, mas também precisa funcionar no seu dia a dia.</p>
 
-          <dl class="sobre__lista">
-            <div><dt>Projeto</dt><dd>pensado para o seu espaço</dd></div>
-            <div><dt>Fabricação</dt><dd>sob medida</dd></div>
-            <div><dt>Entrega</dt><dd>e montagem</dd></div>
+          <dl class="sobre__fatos">
+            <div><dt>${e.anos}</dt><dd>anos de história</dd></div>
+            <div><dt>Sob medida</dt><dd>planejados, mesas e estofados</dd></div>
+            <div><dt>Guaíba</dt><dd>loja no Centro, com entrega</dd></div>
           </dl>
+
+          <a class="link-seta" href="${r}" target="_blank" rel="noopener">
+            Visite a loja ${l.seta}<span class="sr-only"> (abre o Google Maps em nova aba)</span>
+          </a>
         </div>
       </div>
-    </section>`}var me=[{texto:`Excelente atendimento, entrega dentro dos prazos, móveis de qualidade.`,autor:`Alexandre Rocha`,fonte:`Avaliação no Google`},{texto:`Ótimo local pra projetar e comprar móveis sob medida.`,autor:`Rangel Peter`,fonte:`Avaliação no Google`},{texto:`Excelente atendimento!`,autor:`Izabel Campos`,fonte:`Avaliação no Google`}];function he(){return`
+    </section>`}var _e=[{texto:`Excelente atendimento, entrega dentro dos prazos, móveis de qualidade.`,autor:`Alexandre Rocha`,fonte:`Avaliação no Google`},{texto:`Ótimo local pra projetar e comprar móveis sob medida.`,autor:`Rangel Peter`,fonte:`Avaliação no Google`},{texto:`Excelente atendimento!`,autor:`Izabel Campos`,fonte:`Avaliação no Google`}];function ve(){return`
     <section class="secao depoimentos" id="depoimentos" aria-labelledby="depoimentos-titulo">
       <div class="container">
         <header class="depoimentos__topo revelar">
@@ -509,7 +470,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
         </header>
 
         <ul class="depoimentos__lista">
-          ${me.map(e=>`
+          ${_e.map(e=>`
             <li class="revelar">
               <figure class="depoimento">
                 <blockquote><p>“${e.texto}”</p></blockquote>
@@ -524,10 +485,10 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
           </a>
         </p>
       </div>
-    </section>`}var Z=(e,t=`Fale`)=>` <a href="${o(`Olá! Tenho uma dúvida sobre ${e}.`)}" target="_blank" rel="noopener">${t} com a nossa equipe<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></a>.`,ge=[{pergunta:`Móveis planejados são caros mesmo?`,resposta:`<p>Depende do que entra na conta. O valor de um planejado varia com o tamanho do ambiente, os acabamentos e o que vai dentro de cada armário. A diferença é que você investe num móvel feito para o seu espaço, sem pagar por medidas que não servem ou por cantos desperdiçados.</p>
+    </section>`}var Z=(e,t=`Fale`)=>` <a href="${o(`Olá! Tenho uma dúvida sobre ${e}.`)}" target="_blank" rel="noopener">${t} com a nossa equipe<span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></a>.`,ye=[{pergunta:`Móveis planejados são caros mesmo?`,resposta:`<p>Depende do que entra na conta. O valor de um planejado varia com o tamanho do ambiente, os acabamentos e o que vai dentro de cada armário. A diferença é que você investe num móvel feito para o seu espaço, sem pagar por medidas que não servem ou por cantos desperdiçados.</p>
       <p>Para saber quanto fica o seu projeto, o melhor caminho é conversar com a gente com as medidas e as ideias em mãos.${Z(`valores de móveis planejados`)}</p>`},{pergunta:`Vale mesmo a pena investir em móveis planejados?`,resposta:`<p>Quando o projeto é bem pensado, sim. O planejado aproveita cada parede e cada canto, organiza a rotina e deixa o ambiente com a sua cara — algo difícil de conseguir com móveis prontos, que seguem medidas padrão.</p>
       <p>É por isso que a gente começa entendendo como você usa o espaço, antes de desenhar.</p>`},{pergunta:`O que avaliar além da estética?`,resposta:`<p>Escolher planejado só pela estética é o primeiro erro. Bonito por fora, inteligente por dentro: vale olhar a divisão interna dos armários, a circulação no ambiente, a altura das bancadas, a iluminação e o acabamento.</p>
-      <p>E também quem vai fazer: atendimento, cuidado na entrega e cumprimento do que foi combinado fazem toda a diferença no resultado.</p>`},{pergunta:`Vocês também fazem mesas e estofados?`,resposta:`<p>Sim. Além dos móveis planejados, fazemos mesas e estofados sob medida.${Z(`mesas e estofados sob medida`)}</p>`},{pergunta:`Vocês fazem entrega?`,resposta:`<p>Sim, a Movelaria faz entrega. Para confirmar a sua região e os detalhes da montagem,${Z(`entrega e montagem`,`fale`)}</p>`},{pergunta:`Como faço para começar meu projeto?`,resposta:`<p>É só chamar a gente no WhatsApp ou visitar a loja em Guaíba. A partir da conversa, combinamos a medição e partimos para o projeto.${Z(`como começar meu projeto`)}</p>`}];function _e(){return`
+      <p>E também quem vai fazer: atendimento, cuidado na entrega e cumprimento do que foi combinado fazem toda a diferença no resultado.</p>`},{pergunta:`Vocês também fazem mesas e estofados?`,resposta:`<p>Sim. Além dos móveis planejados, fazemos mesas e estofados sob medida.${Z(`mesas e estofados sob medida`)}</p>`},{pergunta:`Vocês fazem entrega?`,resposta:`<p>Sim, a Movelaria faz entrega. Para confirmar a sua região e os detalhes da montagem,${Z(`entrega e montagem`,`fale`)}</p>`},{pergunta:`Como faço para começar meu projeto?`,resposta:`<p>É só chamar a gente no WhatsApp ou visitar a loja em Guaíba. A partir da conversa, combinamos a medição e partimos para o projeto.${Z(`como começar meu projeto`)}</p>`}];function be(){return`
     <section class="secao faq" id="perguntas" aria-labelledby="faq-titulo">
       <div class="container faq__grade">
         <header class="faq__topo revelar">
@@ -537,7 +498,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
         </header>
 
         <div class="acordeao revelar">
-          ${ge.map((e,t)=>`
+          ${ye.map((e,t)=>`
             <div class="acordeao__item">
               <h3 class="acordeao__titulo">
                 <button type="button" class="acordeao__botao" aria-expanded="false" aria-controls="faq-resp-${t}" id="faq-perg-${t}">
@@ -551,7 +512,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
             </div>`).join(``)}
         </div>
       </div>
-    </section>`}function Q(){document.querySelectorAll(`.acordeao__botao`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.getAttribute(`aria-expanded`)===`true`;e.setAttribute(`aria-expanded`,String(!t)),document.getElementById(e.getAttribute(`aria-controls`)).hidden=t})})}function ve(){return`
+    </section>`}function Q(){document.querySelectorAll(`.acordeao__botao`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.getAttribute(`aria-expanded`)===`true`;e.setAttribute(`aria-expanded`,String(!t)),document.getElementById(e.getAttribute(`aria-controls`)).hidden=t})})}function xe(){return`
     <section class="secao contato" id="contato" aria-labelledby="contato-titulo">
       <div class="container contato__grade">
         <div class="contato__info revelar">
@@ -629,8 +590,8 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
             <div class="form__status" role="status" aria-live="polite" data-form-status></div>
           </form>
       </div>
-    </section>`}function ye(e){let t=[],n=e.nome.value.trim(),r=e.telefone.value.replace(/\D/g,``);return n.length<2&&t.push([`nome`,`Informe seu nome.`]),(r.length<10||r.length>13)&&t.push([`telefone`,`Informe um telefone com DDD, por exemplo (51) 90000-0000.`]),e.ambiente.value||t.push([`ambiente`,`Escolha o ambiente de interesse.`]),t}function be(){let e=document.querySelector(`[data-form]`),n=e.querySelector(`[data-form-status]`),a=t=>{e[t].removeAttribute(`aria-invalid`);let n=e.querySelector(`#f-${t}-erro`);n.hidden=!0,n.textContent=``};[`nome`,`telefone`,`ambiente`].forEach(t=>{e[t].addEventListener(`input`,()=>{e[t].getAttribute(`aria-invalid`)&&a(t)})}),e.addEventListener(`submit`,t=>{t.preventDefault(),[`nome`,`telefone`,`ambiente`].forEach(a),n.className=`form__status`,n.textContent=``;let r=ye(e);if(r.length){r.forEach(([t,n])=>{e[t].setAttribute(`aria-invalid`,`true`);let r=e.querySelector(`#f-${t}-erro`);r.textContent=n,r.hidden=!1}),n.classList.add(`form__status--erro`),n.textContent=r.length===1?`Confira o campo destacado.`:`Confira os ${r.length} campos destacados.`,e[r[0][0]].focus();return}let i=[`Olá! Vim pelo site da Movelaria e gostaria de um orçamento.`,``,`Nome: ${e.nome.value.trim()}`,`Telefone: ${e.telefone.value.trim()}`,`Ambiente: ${e.ambiente.value}`],s=e.mensagem.value.trim();s&&i.push(`Mensagem: ${s}`);let c=o(i.join(`
-`));window.open(c,`_blank`,`noopener`),n.classList.add(`form__status--ok`),n.innerHTML=`Tudo certo! Abrimos o WhatsApp com a sua mensagem. Se ele não abriu, <a href="${c}" target="_blank" rel="noopener">toque aqui</a>.`}),document.querySelector(`[data-carregar-mapa]`).addEventListener(`click`,()=>{let e=document.querySelector(`[data-mapa]`),n=document.createElement(`iframe`);n.src=i,n.title=`Mapa: ${t}`,n.loading=`lazy`,n.referrerPolicy=`no-referrer-when-downgrade`,n.className=`mapa__iframe`;let a=document.createElement(`a`);a.href=r,a.target=`_blank`,a.rel=`noopener`,a.className=`mapa__abrir`,a.textContent=`Abrir no Google Maps`,e.replaceWith(n),n.after(a),n.focus()})}function xe(){return`
+    </section>`}function Se(e){let t=[],n=e.nome.value.trim(),r=e.telefone.value.replace(/\D/g,``);return n.length<2&&t.push([`nome`,`Informe seu nome.`]),(r.length<10||r.length>13)&&t.push([`telefone`,`Informe um telefone com DDD, por exemplo (51) 90000-0000.`]),e.ambiente.value||t.push([`ambiente`,`Escolha o ambiente de interesse.`]),t}function Ce(){let e=document.querySelector(`[data-form]`),n=e.querySelector(`[data-form-status]`),a=t=>{e[t].removeAttribute(`aria-invalid`);let n=e.querySelector(`#f-${t}-erro`);n.hidden=!0,n.textContent=``};[`nome`,`telefone`,`ambiente`].forEach(t=>{e[t].addEventListener(`input`,()=>{e[t].getAttribute(`aria-invalid`)&&a(t)})}),e.addEventListener(`submit`,t=>{t.preventDefault(),[`nome`,`telefone`,`ambiente`].forEach(a),n.className=`form__status`,n.textContent=``;let r=Se(e);if(r.length){r.forEach(([t,n])=>{e[t].setAttribute(`aria-invalid`,`true`);let r=e.querySelector(`#f-${t}-erro`);r.textContent=n,r.hidden=!1}),n.classList.add(`form__status--erro`),n.textContent=r.length===1?`Confira o campo destacado.`:`Confira os ${r.length} campos destacados.`,e[r[0][0]].focus();return}let i=[`Olá! Vim pelo site da Movelaria e gostaria de um orçamento.`,``,`Nome: ${e.nome.value.trim()}`,`Telefone: ${e.telefone.value.trim()}`,`Ambiente: ${e.ambiente.value}`],s=e.mensagem.value.trim();s&&i.push(`Mensagem: ${s}`);let c=o(i.join(`
+`));window.open(c,`_blank`,`noopener`),n.classList.add(`form__status--ok`),n.innerHTML=`Tudo certo! Abrimos o WhatsApp com a sua mensagem. Se ele não abriu, <a href="${c}" target="_blank" rel="noopener">toque aqui</a>.`}),document.querySelector(`[data-carregar-mapa]`).addEventListener(`click`,()=>{let e=document.querySelector(`[data-mapa]`),n=document.createElement(`iframe`);n.src=i,n.title=`Mapa: ${t}`,n.loading=`lazy`,n.referrerPolicy=`no-referrer-when-downgrade`,n.className=`mapa__iframe`;let a=document.createElement(`a`);a.href=r,a.target=`_blank`,a.rel=`noopener`,a.className=`mapa__abrir`,a.textContent=`Abrir no Google Maps`,e.replaceWith(n),n.after(a),n.focus()})}function we(){return`
     <footer class="footer" data-footer>
       <div class="container footer__grade">
         <div class="footer__marca">
@@ -661,21 +622,21 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/OrbitControls-D
         <p>© <span data-ano></span> ${e.nome}. Todos os direitos reservados.</p>
         <a href="#inicio">Voltar ao topo ↑</a>
       </div>
-    </footer>`}function Se(){document.querySelector(`[data-ano]`).textContent=new Date().getFullYear()}function Ce(){return`
+    </footer>`}function Te(){document.querySelector(`[data-ano]`).textContent=new Date().getFullYear()}function Ee(){return`
     <a class="fab" href="${o()}" target="_blank" rel="noopener" data-fab aria-label="Pedir orçamento pelo WhatsApp (abre em nova aba)">
       ${l.whatsapp}
-    </a>`}function we(){let e=document.querySelector(`[data-fab]`),t=document.getElementById(`inicio`),n=[document.querySelector(`[data-form]`),document.querySelector(`[data-footer]`)],r={passouHero:!1,bloqueado:new Set},i=()=>{let t=r.passouHero&&r.bloqueado.size===0;e.classList.toggle(`fab--visivel`,t),e.tabIndex=t?0:-1,e.setAttribute(`aria-hidden`,String(!t))};new IntersectionObserver(([e])=>{r.passouHero=!e.isIntersecting,i()}).observe(t);let a=new IntersectionObserver(e=>{e.forEach(e=>e.isIntersecting?r.bloqueado.add(e.target):r.bloqueado.delete(e.target)),i()});n.forEach(e=>e&&a.observe(e)),i()}document.querySelector(`#app`).innerHTML=`
+    </a>`}function De(){let e=document.querySelector(`[data-fab]`),t=document.getElementById(`inicio`),n=[document.querySelector(`[data-form]`),document.querySelector(`[data-footer]`)],r={passouHero:!1,bloqueado:new Set},i=()=>{let t=r.passouHero&&r.bloqueado.size===0;e.classList.toggle(`fab--visivel`,t),e.tabIndex=t?0:-1,e.setAttribute(`aria-hidden`,String(!t))};new IntersectionObserver(([e])=>{r.passouHero=!e.isIntersecting,i()}).observe(t);let a=new IntersectionObserver(e=>{e.forEach(e=>e.isIntersecting?r.bloqueado.add(e.target):r.bloqueado.delete(e.target)),i()});n.forEach(e=>e&&a.observe(e)),i()}document.querySelector(`#app`).innerHTML=`
   ${f()}
   <main id="conteudo" tabindex="-1">
     ${z()}
-    ${oe()}
-    ${le()}
-    ${fe()}
-    ${pe()}
-    ${he()}
-    ${_e()}
+    ${ce()}
+    ${de()}
+    ${me()}
+    ${ge()}
     ${ve()}
+    ${be()}
+    ${xe()}
   </main>
-  ${xe()}
-  ${Ce()}
-`,p(),B(),ue(),se(),Q(),be(),Se(),we(),_();var $=document.querySelectorAll(`.revelar`);if(window.matchMedia(`(prefers-reduced-motion: reduce)`).matches||!(`IntersectionObserver`in window))$.forEach(e=>e.classList.add(`visivel`));else{let e=new IntersectionObserver(t=>{t.forEach(t=>{t.isIntersecting&&(t.target.classList.add(`visivel`),e.unobserve(t.target))})},{rootMargin:`0px 0px -8% 0px`,threshold:.08});$.forEach(t=>e.observe(t))}
+  ${we()}
+  ${Ee()}
+`,p(),B(),fe(),le(),Q(),Ce(),Te(),De(),_();var $=document.querySelectorAll(`.revelar`);if(window.matchMedia(`(prefers-reduced-motion: reduce)`).matches||!(`IntersectionObserver`in window))$.forEach(e=>e.classList.add(`visivel`));else{let e=new IntersectionObserver(t=>{t.forEach(t=>{t.isIntersecting&&(t.target.classList.add(`visivel`),e.unobserve(t.target))})},{rootMargin:`0px 0px -8% 0px`,threshold:.08});$.forEach(t=>e.observe(t))}
