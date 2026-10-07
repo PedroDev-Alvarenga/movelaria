@@ -11,10 +11,6 @@ const nomeAmbiente = (id) => ambientes.find((a) => a.id === id)?.nome ?? id
 // A partir de quantas fotos vale mostrar o filtro por ambiente
 const MINIMO_PARA_FILTRO = 8
 
-function selo(p) {
-  return p.tipo === 'render-3d' ? '<span class="selo-3d">Projeto 3D</span>' : ''
-}
-
 // Só entram na galeria os itens que já têm foto
 const fotos = projetos.filter((p) => p.arquivo)
 
@@ -31,7 +27,7 @@ export function Galeria() {
             ${rotulo('Projetos')}
             <h2 id="projetos-titulo">Bonito por fora.<br>Inteligente por dentro.</h2>
           </div>
-          <p>Alguns ambientes projetados pela Movelaria.${temRender ? ' As imagens marcadas como “Projeto 3D” são renderizações de projeto.' : ''}</p>
+          <p>Alguns ambientes projetados pela Movelaria.${temRender ? ' Parte das imagens são renderizações 3D dos projetos.' : ''}</p>
         </header>
 
         ${
@@ -52,7 +48,6 @@ export function Galeria() {
               <button type="button" class="galeria__botao" data-abrir="${i}">
                 <span class="sr-only">Ampliar: </span>
                 ${Imagem({ arquivo: p.arquivo, alt: p.alt, largura: p.largura, altura: p.altura })}
-                ${selo(p)}
                 <span class="galeria__info">
                   <span class="galeria__ambiente">${nomeAmbiente(p.ambiente)}</span>
                   <span class="galeria__titulo">${p.titulo}</span>
@@ -132,7 +127,7 @@ export function iniciarGaleria() {
     const p = fotos[indice]
     const nome = nomeAmbiente(p.ambiente)
     midia.innerHTML =
-      Imagem({ arquivo: p.arquivo, alt: p.alt, largura: p.largura, altura: p.altura, lazy: false, classe: 'imagem--lightbox', proporcaoReal: true }) + selo(p)
+      Imagem({ arquivo: p.arquivo, alt: p.alt, largura: p.largura, altura: p.altura, lazy: false, classe: 'imagem--lightbox', proporcaoReal: true })
     iniciarImagens(midia)
     dialog.querySelector('[data-titulo]').textContent = p.titulo
     dialog.querySelector('[data-ambiente-lb]').textContent = nome + (p.tipo === 'render-3d' ? ' · Projeto 3D' : '')

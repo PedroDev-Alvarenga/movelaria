@@ -9,7 +9,7 @@ import './styles/secoes.css'
 
 import { Header, iniciarHeader } from './components/header.js'
 import { Hero, iniciarHero } from './components/hero.js'
-import { Ambientes } from './components/ambientes.js'
+import { Ambientes, iniciarAmbientes } from './components/ambientes.js'
 import { Galeria, iniciarGaleria } from './components/galeria.js'
 import { Processo } from './components/processo.js'
 import { Sobre } from './components/sobre.js'
@@ -39,6 +39,7 @@ document.querySelector('#app').innerHTML = `
 iniciarHeader()
 iniciarHero()
 iniciarGaleria()
+iniciarAmbientes()
 iniciarFaq()
 iniciarContato()
 iniciarFooter()

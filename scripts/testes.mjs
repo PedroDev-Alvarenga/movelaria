@@ -32,16 +32,24 @@ await tg.click()
 await page.locator('.nav__link', { hasText: 'Contato' }).click()
 ok((await tg.getAttribute('aria-expanded')) === 'false', 'clicar num link fecha o menu')
 
+// Planta de ambientes
+await page.locator('[data-amb-opcao="closet"]').click()
+ok((await page.locator('[data-amb-nome]').textContent()) === 'Closet', 'planta: escolher Closet atualiza o painel')
+ok((await page.locator('.planta [data-amb="closet"].ativo').count()) === 1, 'planta: cômodo Closet acende')
+ok(decodeURIComponent(await page.locator('[data-amb-link]').getAttribute('href')).includes('closet sob medida'), 'planta: link do WhatsApp fala do closet')
+await page.locator('[data-amb-opcao="mesas"]').click()
+ok((await page.locator('.planta [data-peca="mesas"].ativo').count()) === 1, 'planta: Mesas acende a mesa')
+
 // Galeria: só fotos reais + bloco do Instagram (filtro só aparece com 8+ fotos)
 const nFotos = await page.locator('[data-abrir]').count()
-ok(nFotos === 4, `galeria mostra só as 4 fotos reais (mostrou ${nFotos})`)
+ok(nFotos === 3, `galeria mostra só as 3 fotos reais (mostrou ${nFotos})`)
 ok((await page.locator('.galeria__insta').getAttribute('href')) === 'https://www.instagram.com/movelaria_rodrigo/', 'bloco do Instagram com link certo')
 ok((await page.locator('[data-filtro]').count()) === 0, 'sem filtro com poucas fotos')
 
 // Lightbox
 await page.locator('[data-abrir]').first().click()
 ok(await page.locator('[data-lightbox]').evaluate((d) => d.open), 'lightbox abre')
-ok((await page.locator('[data-contador]').textContent()) === '1 / 4', 'contador 1 / 4')
+ok((await page.locator('[data-contador]').textContent()) === '1 / 3', 'contador 1 / 3')
 await page.keyboard.press('ArrowRight')
 ok((await page.locator('[data-titulo]').textContent()) === 'Closet com iluminação', 'seta → avança')
 ok((await page.locator('[data-ambiente-lb]').textContent()).includes('Projeto 3D'), 'selo Projeto 3D no lightbox')
