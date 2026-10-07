@@ -1,10 +1,27 @@
 import { icones } from './icones.js'
 
-// Cena 3D leve do hero: carrega um modelo de móvel pronto (CC BY 4.0, ver
-// public/modelos/CREDITOS.txt) em vez de formas geométricas caseiras — fica
-// muito mais bonito, mas é só ilustrativo: não é um móvel real da Movelaria.
-// Carregada sob demanda (three.js + modelo só baixam quando o hero entra na
-// tela) e pausada quando o hero sai da tela ou a aba fica em segundo plano.
+// Carrossel 3D leve do hero: alterna entre peças de móvel prontas (ver
+// public/modelos/CREDITOS.txt) a cada 2s — ilustrativo, não são móveis reais
+// da Movelaria. Pausa ao passar o mouse ou arrastar, e com prefers-reduced-motion
+// começa pausado (o usuário navega pelas bolinhas/botão). Carregado sob demanda
+// e pausado quando o hero sai da tela ou a aba vai pra segundo plano.
+
+const INTERVALO_MS = 2000
+
+const ITENS = [
+  {
+    id: 'armario',
+    arquivo: 'modelos/armario/armario.gltf',
+    nome: 'armário ripado',
+    credito: 'Peça 3D ilustrativa — modelo "Modern Wooden Cabinet", Poly Haven, CC0',
+  },
+  {
+    id: 'sofa',
+    arquivo: 'modelos/sofa-veludo.glb',
+    nome: 'sofá de veludo',
+    credito: 'Peça 3D ilustrativa — modelo "GlamVelvetSofa" de Eric Chadwick / Wayfair, CC BY 4.0',
+  },
+]
 
 let carregamento
 function carregarThree() {
@@ -24,11 +41,11 @@ function carregarThree() {
   return carregamento
 }
 
-// Carrega o .glb, centraliza no chão (y=0) e normaliza o tamanho pra caber
-// bem no cartão do hero, não importa o tamanho real do modelo original.
-async function carregarModelo(THREE, GLTFLoader) {
+// Carrega um .glb/.gltf, centraliza no chão (y=0) e normaliza o tamanho pra
+// caber bem no cartão do hero, não importa o tamanho real do modelo original.
+async function carregarModelo(THREE, GLTFLoader, item) {
   const loader = new GLTFLoader()
-  const url = `${import.meta.env.BASE_URL}modelos/armario/armario.gltf`
+  const url = `${import.meta.env.BASE_URL}${item.arquivo}`
   const gltf = await loader.loadAsync(url)
   const modelo = gltf.scene
 
@@ -49,12 +66,39 @@ async function carregarModelo(THREE, GLTFLoader) {
     }
   })
 
-  return { modelo, alturaModelo: tamanho.y * escala }
+  return { item, modelo, alturaModelo: tamanho.y * escala }
+}
+
+function criarControles(visual, itensCarregados) {
+  const caixa = document.createElement('div')
+  caixa.className = 'hero__carrossel-controles'
+  caixa.setAttribute('role', 'group')
+  caixa.setAttribute('aria-label', 'Controles do carrossel 3D')
+
+  const botaoPausar = document.createElement('button')
+  botaoPausar.type = 'button'
+  botaoPausar.className = 'hero__carrossel-pausar'
+  caixa.appendChild(botaoPausar)
+
+  const pontos = document.createElement('div')
+  pontos.className = 'hero__carrossel-pontos'
+  const botoesPonto = itensCarregados.map(({ item }) => {
+    const ponto = document.createElement('button')
+    ponto.type = 'button'
+    ponto.className = 'hero__carrossel-ponto'
+    ponto.setAttribute('aria-label', `Ver ${item.nome}`)
+    pontos.appendChild(ponto)
+    return ponto
+  })
+  caixa.appendChild(pontos)
+
+  visual.querySelector('[data-credito-hero]')?.insertAdjacentElement('afterend', caixa)
+  return { botaoPausar, botoesPonto }
 }
 
 // `container`: elemento vazio onde o canvas entra. Retorna sem fazer nada
 // (o CSS mostra o desenho técnico como alternativa) se o three.js não
-// carregar, o modelo não baixar ou o WebGL falhar.
+// carregar, nenhum modelo baixar ou o WebGL falhar.
 export async function iniciarHero3D(container) {
   if (!container) return
   const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -68,10 +112,9 @@ export async function iniciarHero3D(container) {
   }
   if (!container.isConnected) return
 
-  let modelo, alturaModelo
-  try {
-    ;({ modelo, alturaModelo } = await carregarModelo(THREE, GLTFLoader))
-  } catch {
+  const resultados = await Promise.allSettled(ITENS.map((item) => carregarModelo(THREE, GLTFLoader, item)))
+  const itensCarregados = resultados.filter((r) => r.status === 'fulfilled').map((r) => r.value)
+  if (itensCarregados.length === 0) {
     container.dataset.erro3d = ''
     return
   }
@@ -87,7 +130,7 @@ export async function iniciarHero3D(container) {
 
   const cena = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 30)
-  const alvo = new THREE.Vector3(0, alturaModelo * 0.42, 0)
+  const alvo = new THREE.Vector3(0, 0, 0)
   const azimute = -0.5
   const polar = 1.25
   const raioFinal = 6.4
@@ -103,12 +146,11 @@ export async function iniciarHero3D(container) {
   container.appendChild(renderer.domElement)
 
   // Ambiente procedural simples (sem baixar HDR externo) — dá reflexo e brilho
-  // decentes ao veludo/metal do modelo em vez de ficar tudo fosco e chapado.
+  // decentes aos materiais em vez de ficar tudo fosco e chapado.
   const pmrem = new THREE.PMREMGenerator(renderer)
   cena.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
   pmrem.dispose()
 
-  cena.add(modelo)
   cena.add(new THREE.HemisphereLight(0xfff3df, 0xcdbfa6, 0.5))
 
   const luzChave = new THREE.DirectionalLight(0xffb979, 1.3)
@@ -129,11 +171,7 @@ export async function iniciarHero3D(container) {
   piso.receiveShadow = true
   cena.add(piso)
 
-  camera.position.setFromSphericalCoords(reduzMovimento ? raioFinal : raioInicial, polar, azimute).add(alvo)
-  camera.lookAt(alvo)
-
   const controles = new OrbitControls(camera, renderer.domElement)
-  controles.target.copy(alvo)
   controles.enableZoom = false
   controles.enablePan = false
   controles.enableDamping = true
@@ -172,8 +210,113 @@ export async function iniciarHero3D(container) {
     if (quadro === null) quadro = requestAnimationFrame(loop)
   }
 
-  // Animação de entrada única (câmera se aproxima) — a mesma ideia do antigo
-  // desenho que se desenhava uma vez. Pula direto com prefers-reduced-motion.
+  // --- Troca de peça (câmera se afasta, troca o modelo, se aproxima de novo) ---
+  let grupoAtual = null
+  let indiceAtual = 0
+
+  const posicionarCamera = (raio) => {
+    camera.position.setFromSphericalCoords(raio, polar, azimute).add(alvo)
+    camera.lookAt(alvo)
+  }
+
+  const mostrar = (indice, { animado }) => {
+    const { modelo, alturaModelo, item } = itensCarregados[indice]
+    if (grupoAtual) cena.remove(grupoAtual)
+    grupoAtual = modelo
+    cena.add(grupoAtual)
+    alvo.set(0, alturaModelo * 0.42, 0)
+    controles.target.copy(alvo)
+
+    const visual = container.closest('.hero__visual')
+    const credito = visual?.querySelector('[data-credito-hero]')
+    if (credito) credito.textContent = item.credito
+
+    botoesPonto.forEach((b, i) => b.setAttribute('aria-current', String(i === indice)))
+
+    if (!animado || reduzMovimento) {
+      posicionarCamera(raioFinal)
+      renderizar()
+      return
+    }
+    const t0 = performance.now()
+    const duracao = 650
+    const passo = (agora) => {
+      const p = Math.min(1, (agora - t0) / duracao)
+      const suave = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
+      posicionarCamera(raioInicial + (raioFinal - raioInicial) * suave)
+      renderizar()
+      if (p < 1) requestAnimationFrame(passo)
+    }
+    requestAnimationFrame(passo)
+  }
+
+  // --- Avanço automático, pausável (hover, arrasto, botão, reduced-motion) ---
+  let pausadoManual = reduzMovimento
+  let emHover = false
+  let emArraste = false
+  let temporizador = null
+
+  const estaPausado = () => pausadoManual || emHover || emArraste || itensCarregados.length < 2
+  const pararTemporizador = () => {
+    if (temporizador) {
+      clearTimeout(temporizador)
+      temporizador = null
+    }
+  }
+  const agendarTemporizador = () => {
+    pararTemporizador()
+    if (estaPausado() || !visivel) return
+    temporizador = setTimeout(() => {
+      indiceAtual = (indiceAtual + 1) % itensCarregados.length
+      mostrar(indiceAtual, { animado: true })
+      agendarTemporizador()
+    }, INTERVALO_MS)
+  }
+  const atualizarBotaoPausar = () => {
+    botaoPausar.innerHTML = pausadoManual ? `${icones.tocar} Continuar` : `${icones.pausar} Pausar`
+    botaoPausar.setAttribute('aria-pressed', String(pausadoManual))
+  }
+
+  const visual0 = container.closest('.hero__visual')
+  const { botaoPausar, botoesPonto } =
+    itensCarregados.length > 1 ? criarControles(visual0, itensCarregados) : { botaoPausar: null, botoesPonto: [] }
+
+  if (botaoPausar) {
+    atualizarBotaoPausar()
+    botaoPausar.addEventListener('click', () => {
+      pausadoManual = !pausadoManual
+      atualizarBotaoPausar()
+      if (pausadoManual) pararTemporizador()
+      else agendarTemporizador()
+    })
+  }
+  botoesPonto.forEach((ponto, i) => {
+    ponto.addEventListener('click', () => {
+      if (i === indiceAtual) return
+      indiceAtual = i
+      mostrar(indiceAtual, { animado: true })
+      agendarTemporizador()
+    })
+  })
+
+  container.addEventListener('pointerenter', () => {
+    emHover = true
+    pararTemporizador()
+  })
+  container.addEventListener('pointerleave', () => {
+    emHover = false
+    agendarTemporizador()
+  })
+  controles.addEventListener('start', () => {
+    emArraste = true
+    pararTemporizador()
+  })
+  controles.addEventListener('end', () => {
+    emArraste = false
+    agendarTemporizador()
+  })
+
+  // --- Entrada única (a mesma ideia do antigo desenho que se desenhava uma vez) ---
   let entrou = false
   const entrar = () => {
     if (entrou) return
@@ -192,22 +335,9 @@ export async function iniciarHero3D(container) {
     const credito = visual?.querySelector('[data-credito-hero]')
     if (credito) credito.hidden = false
 
-    if (reduzMovimento) {
-      renderizar()
-      return
-    }
-    const t0 = performance.now()
-    const duracao = 1100
-    const passo = (agora) => {
-      const p = Math.min(1, (agora - t0) / duracao)
-      const suave = 1 - Math.pow(1 - p, 3)
-      const raio = raioInicial + (raioFinal - raioInicial) * suave
-      camera.position.setFromSphericalCoords(raio, polar, azimute).add(alvo)
-      camera.lookAt(alvo)
-      renderizar()
-      if (p < 1) requestAnimationFrame(passo)
-    }
-    requestAnimationFrame(passo)
+    posicionarCamera(reduzMovimento ? raioFinal : raioInicial)
+    mostrar(0, { animado: !reduzMovimento })
+    agendarTemporizador()
   }
 
   const observador = new IntersectionObserver(
@@ -217,6 +347,9 @@ export async function iniciarHero3D(container) {
         if (visivel) {
           iniciarLoop()
           entrar()
+          agendarTemporizador()
+        } else {
+          pararTemporizador()
         }
       })
     },
@@ -226,7 +359,12 @@ export async function iniciarHero3D(container) {
 
   document.addEventListener('visibilitychange', () => {
     visivel = !document.hidden && visivel
-    if (visivel) iniciarLoop()
+    if (visivel) {
+      iniciarLoop()
+      agendarTemporizador()
+    } else {
+      pararTemporizador()
+    }
   })
 
   const ro = new ResizeObserver(() => {

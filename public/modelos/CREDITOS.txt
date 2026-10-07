@@ -1,10 +1,23 @@
-MODELO 3D — armario/armario.gltf
-==================================
-"Modern Wooden Cabinet" — Poly Haven (polyhaven.com)
-Licença: CC0 1.0 (domínio público — não exige atribuição)
-https://polyhaven.com/a/modern_wooden_cabinet
+MODELOS 3D DO CARROSSEL DO HERO
+=================================
+Usados como peças 3D ILUSTRATIVAS (não são móveis reais da Movelaria —
+a marca não tem fotos em alta nem modelo 3D dos próprios trabalhos).
 
-Usado como peça 3D ILUSTRATIVA no hero do site (não é um móvel real da
-Movelaria — a marca não tem fotos em alta nem modelo 3D dos próprios
-trabalhos). Texturas em resolução 1k (reduzidas) para manter o peso leve
-no mobile. Crédito mantido por boa prática, embora o CC0 não exija.
+1) armario/armario.gltf — "Modern Wooden Cabinet"
+   Poly Haven (polyhaven.com) — CC0 1.0 (domínio público, sem exigência de atribuição)
+   https://polyhaven.com/a/modern_wooden_cabinet
+   Texturas em 1k (reduzidas) para manter o peso leve no mobile.
+
+2) sofa-veludo.glb — "GlamVelvetSofa"
+   © 2021 Wayfair, LLC — Autor: Eric Chadwick for Everything
+   Licença: CC BY 4.0 (exige atribuição)
+   https://creativecommons.org/licenses/by/4.0/
+   https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/GlamVelvetSofa
+
+Os créditos aparecem na legenda do hero conforme o modelo ativo no
+carrossel e devem ser mantidos caso algum modelo seja trocado.
+
+Pendente: ainda não há modelo de cama nem penteadeira em estilo
+contemporâneo disponível em catálogos de uso livre — adicionar ao
+carrossel quando houver um que combine com o visual "marcenaria
+artesanal contemporânea" da marca.

@@ -504,6 +504,63 @@ body.menu-aberto {
   text-decoration-style: dotted;
 }
 
+.hero__carrossel-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.hero__carrossel-pausar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 4px 0;
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  font-family: var(--fonte-titulo);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hero__carrossel-pausar svg {
+  width: 15px;
+  height: 15px;
+}
+
+.hero__carrossel-pausar:hover {
+  color: var(--marinho);
+}
+
+.hero__carrossel-pontos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero__carrossel-ponto {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--borda);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.hero__carrossel-ponto:hover {
+  background: var(--madeira);
+}
+
+.hero__carrossel-ponto[aria-current='true'] {
+  background: var(--marinho);
+  transform: scale(1.25);
+}
+
 .hero__etapa--1 {
   display: inline-flex;
   align-items: center;

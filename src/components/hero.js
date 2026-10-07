@@ -149,10 +149,7 @@ export function Hero() {
             <span class="hero__seta" aria-hidden="true">→</span>
             <span class="hero__etapa hero__etapa--2">ao móvel pronto</span>
           </figcaption>
-          <p class="hero__credito" data-credito-hero hidden>
-            Peça 3D ilustrativa — modelo "Modern Wooden Cabinet", Poly Haven,
-            <abbr title="Creative Commons Zero — domínio público">CC0</abbr>
-          </p>
+          <p class="hero__credito" data-credito-hero hidden></p>
         </figure>
       </div>
     </section>`
