@@ -28,7 +28,7 @@ function carregarThree() {
 // bem no cartão do hero, não importa o tamanho real do modelo original.
 async function carregarModelo(THREE, GLTFLoader) {
   const loader = new GLTFLoader()
-  const url = `${import.meta.env.BASE_URL}modelos/sofa-veludo.glb`
+  const url = `${import.meta.env.BASE_URL}modelos/armario/armario.gltf`
   const gltf = await loader.loadAsync(url)
   const modelo = gltf.scene
 

@@ -1,12 +1,10 @@
-MODELO 3D — sofa-veludo.glb
-============================
-"GlamVelvetSofa" — © 2021 Wayfair, LLC
-Autor: Eric Chadwick for Everything
-Licença: Creative Commons Attribution 4.0 International (CC BY 4.0)
-https://creativecommons.org/licenses/by/4.0/
-Origem: https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/GlamVelvetSofa
+MODELO 3D — armario/armario.gltf
+==================================
+"Modern Wooden Cabinet" — Poly Haven (polyhaven.com)
+Licença: CC0 1.0 (domínio público — não exige atribuição)
+https://polyhaven.com/a/modern_wooden_cabinet
 
 Usado como peça 3D ILUSTRATIVA no hero do site (não é um móvel real da
 Movelaria — a marca não tem fotos em alta nem modelo 3D dos próprios
-trabalhos). O crédito aparece também na legenda do hero e deve ser mantido
-caso o modelo seja trocado por outro sob a mesma licença.
+trabalhos). Texturas em resolução 1k (reduzidas) para manter o peso leve
+no mobile. Crédito mantido por boa prática, embora o CC0 não exija.
