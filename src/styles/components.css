@@ -493,6 +493,17 @@ body.menu-aberto {
   color: var(--madeira-texto);
 }
 
+.hero__credito {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.hero__credito abbr {
+  text-decoration-style: dotted;
+}
+
 .hero__etapa--1 {
   display: inline-flex;
   align-items: center;

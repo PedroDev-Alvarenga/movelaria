@@ -1,119 +1,76 @@
 import { icones } from './icones.js'
 
-// Cena 3D leve e estilizada da "cozinha" do hero: formas geométricas simples
-// (nada de modelo realista — a marca não tem fotos em alta nem modelo 3D dos
-// móveis reais), com luz quente de fim de tarde e rotação discreta ao arrastar.
-// Carregada sob demanda (o three.js só baixa quando o hero entra na tela) e
-// pausada quando o hero sai da tela ou a aba fica em segundo plano.
-
-const CORES = {
-  madeira: 0xc79a62,
-  madeiraClara: 0xe3c79f,
-  salvia: 0x9dae8f,
-  grafite: 0x3a3d40,
-  creme: 0xf4efe6,
-  led: 0xffd58a,
-  terracota: 0xc1693f,
-  folha: 0x6f8a63,
-}
+// Cena 3D leve do hero: carrega um modelo de móvel pronto (CC BY 4.0, ver
+// public/modelos/CREDITOS.txt) em vez de formas geométricas caseiras — fica
+// muito mais bonito, mas é só ilustrativo: não é um móvel real da Movelaria.
+// Carregada sob demanda (three.js + modelo só baixam quando o hero entra na
+// tela) e pausada quando o hero sai da tela ou a aba fica em segundo plano.
 
 let carregamento
 function carregarThree() {
   if (!carregamento) {
-    carregamento = Promise.all([import('three'), import('three/addons/controls/OrbitControls.js')]).then(
-      ([THREE, { OrbitControls }]) => ({ THREE, OrbitControls }),
-    )
+    carregamento = Promise.all([
+      import('three'),
+      import('three/addons/controls/OrbitControls.js'),
+      import('three/addons/loaders/GLTFLoader.js'),
+      import('three/addons/environments/RoomEnvironment.js'),
+    ]).then(([THREE, { OrbitControls }, { GLTFLoader }, { RoomEnvironment }]) => ({
+      THREE,
+      OrbitControls,
+      GLTFLoader,
+      RoomEnvironment,
+    }))
   }
   return carregamento
 }
 
-function construirCozinha(THREE) {
-  const grupo = new THREE.Group()
+// Carrega o .glb, centraliza no chão (y=0) e normaliza o tamanho pra caber
+// bem no cartão do hero, não importa o tamanho real do modelo original.
+async function carregarModelo(THREE, GLTFLoader) {
+  const loader = new GLTFLoader()
+  const url = `${import.meta.env.BASE_URL}modelos/sofa-veludo.glb`
+  const gltf = await loader.loadAsync(url)
+  const modelo = gltf.scene
 
-  const matMadeira = new THREE.MeshStandardMaterial({ color: CORES.madeiraClara, roughness: 0.75 })
-  const matNicho = new THREE.MeshStandardMaterial({ color: CORES.creme, roughness: 0.4 })
-  const matSalvia = new THREE.MeshStandardMaterial({ color: CORES.salvia, roughness: 0.7 })
-  const matGrafite = new THREE.MeshStandardMaterial({ color: CORES.grafite, roughness: 0.5, metalness: 0.15 })
-  const matLed = new THREE.MeshStandardMaterial({ color: CORES.led, emissive: CORES.led, emissiveIntensity: 1.1 })
-  const matTerracota = new THREE.MeshStandardMaterial({ color: CORES.terracota, roughness: 0.8 })
-  const matFolha = new THREE.MeshStandardMaterial({ color: CORES.folha, roughness: 0.6 })
+  const caixa = new THREE.Box3().setFromObject(modelo)
+  const tamanho = new THREE.Vector3()
+  const centro = new THREE.Vector3()
+  caixa.getSize(tamanho)
+  caixa.getCenter(centro)
 
-  const comSombra = (malha) => {
-    malha.castShadow = true
-    malha.receiveShadow = true
-    return malha
-  }
+  const escala = 3.1 / Math.max(tamanho.x, tamanho.y, tamanho.z)
+  modelo.scale.setScalar(escala)
+  modelo.position.set(-centro.x * escala, -caixa.min.y * escala, -centro.z * escala)
 
-  // Armários superiores (4 módulos, um deles é o nicho com a planta)
-  const larguras = [1.3, 1.3, 1.3, 1.3]
-  let x = -2.6
-  larguras.forEach((l, i) => {
-    const caixa = comSombra(new THREE.Mesh(new THREE.BoxGeometry(l - 0.06, 1.05, 0.58), i === 2 ? matNicho : matMadeira))
-    caixa.position.set(x + l / 2, 1.35, 0)
-    grupo.add(caixa)
-    x += l
+  modelo.traverse((filho) => {
+    if (filho.isMesh) {
+      filho.castShadow = true
+      filho.receiveShadow = true
+    }
   })
 
-  // Fita de LED sob os armários + luz pontual quente
-  const led = new THREE.Mesh(new THREE.BoxGeometry(5.1, 0.04, 0.5), matLed)
-  led.position.set(0, 0.8, 0.02)
-  grupo.add(led)
-  const luzLed = new THREE.PointLight(CORES.led, 1.1, 2.6, 2)
-  luzLed.position.set(0, 0.74, 0.5)
-  grupo.add(luzLed)
-
-  // Bancada
-  const bancada = comSombra(new THREE.Mesh(new THREE.BoxGeometry(5.3, 0.12, 0.68), matNicho))
-  bancada.position.y = 0.56
-  grupo.add(bancada)
-
-  // Armários inferiores (sálvia) + "forno" (grafite)
-  const inferior = comSombra(new THREE.Mesh(new THREE.BoxGeometry(3.75, 1.05, 0.6), matSalvia))
-  inferior.position.set(-0.75, -0.02, 0)
-  grupo.add(inferior)
-
-  const forno = comSombra(new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.05, 0.6), matGrafite))
-  forno.position.set(2.15, -0.02, 0)
-  grupo.add(forno)
-
-  // Rodapé
-  const rodape = new THREE.Mesh(new THREE.BoxGeometry(5.3, 0.08, 0.68), matGrafite)
-  rodape.position.set(0, -0.58, 0)
-  grupo.add(rodape)
-
-  // Planta decorativa estilizada (vaso terracota + folhas em cone)
-  const vaso = comSombra(new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.22, 10), matTerracota))
-  vaso.position.set(-1.95, 0.75, 0.38)
-  grupo.add(vaso)
-  ;[-1, 0, 1].forEach((i) => {
-    const folha = comSombra(new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.4, 6), matFolha))
-    folha.position.set(-1.95 + i * 0.07, 1.0 + Math.abs(i) * 0.02, 0.38)
-    folha.rotation.z = i * 0.4
-    grupo.add(folha)
-  })
-
-  // Piso só para receber a sombra de contato (invisível, sem material colorido)
-  const piso = new THREE.Mesh(new THREE.PlaneGeometry(9, 6), new THREE.ShadowMaterial({ opacity: 0.18 }))
-  piso.rotation.x = -Math.PI / 2
-  piso.position.y = -1.12
-  piso.receiveShadow = true
-  grupo.add(piso)
-
-  // Reduz tudo um pouco para caber com folga no enquadramento do cartão.
-  grupo.scale.setScalar(0.85)
-
-  return grupo
+  return { modelo, alturaModelo: tamanho.y * escala }
 }
 
 // `container`: elemento vazio onde o canvas entra. Retorna sem fazer nada
-// (o CSS mostra um placeholder) se o three.js não carregar ou o WebGL falhar.
+// (o CSS mostra o desenho técnico como alternativa) se o three.js não
+// carregar, o modelo não baixar ou o WebGL falhar.
 export async function iniciarHero3D(container) {
   if (!container) return
   const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  let THREE, OrbitControls
+  let THREE, OrbitControls, GLTFLoader, RoomEnvironment
   try {
-    ;({ THREE, OrbitControls } = await carregarThree())
+    ;({ THREE, OrbitControls, GLTFLoader, RoomEnvironment } = await carregarThree())
+  } catch {
+    container.dataset.erro3d = ''
+    return
+  }
+  if (!container.isConnected) return
+
+  let modelo, alturaModelo
+  try {
+    ;({ modelo, alturaModelo } = await carregarModelo(THREE, GLTFLoader))
   } catch {
     container.dataset.erro3d = ''
     return
@@ -130,10 +87,11 @@ export async function iniciarHero3D(container) {
 
   const cena = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 30)
-  const alvo = new THREE.Vector3(0, 0.1, 0)
+  const alvo = new THREE.Vector3(0, alturaModelo * 0.42, 0)
   const azimute = -0.5
-  const polar = 1.22
-  const raioFinal = 7.8
+  const polar = 1.25
+  const raioFinal = 6.4
+  const raioInicial = 8.8
 
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
   renderer.shadowMap.enabled = true
@@ -144,10 +102,16 @@ export async function iniciarHero3D(container) {
   renderer.domElement.setAttribute('aria-hidden', 'true')
   container.appendChild(renderer.domElement)
 
-  cena.add(construirCozinha(THREE))
-  cena.add(new THREE.HemisphereLight(0xfff3df, 0xcdbfa6, 0.65))
+  // Ambiente procedural simples (sem baixar HDR externo) — dá reflexo e brilho
+  // decentes ao veludo/metal do modelo em vez de ficar tudo fosco e chapado.
+  const pmrem = new THREE.PMREMGenerator(renderer)
+  cena.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+  pmrem.dispose()
 
-  const luzChave = new THREE.DirectionalLight(0xffb979, 1.15)
+  cena.add(modelo)
+  cena.add(new THREE.HemisphereLight(0xfff3df, 0xcdbfa6, 0.5))
+
+  const luzChave = new THREE.DirectionalLight(0xffb979, 1.3)
   luzChave.position.set(4, 4.5, 3)
   luzChave.castShadow = true
   luzChave.shadow.mapSize.set(1024, 1024)
@@ -155,11 +119,17 @@ export async function iniciarHero3D(container) {
   luzChave.shadow.camera.far = 12
   cena.add(luzChave)
 
-  const luzPreenchimento = new THREE.DirectionalLight(0xdfe6f2, 0.35)
+  const luzPreenchimento = new THREE.DirectionalLight(0xdfe6f2, 0.4)
   luzPreenchimento.position.set(-4, 2, -2)
   cena.add(luzPreenchimento)
 
-  camera.position.setFromSphericalCoords(reduzMovimento ? raioFinal : 10.6, polar, azimute).add(alvo)
+  // Piso só para receber a sombra de contato (invisível, sem material colorido)
+  const piso = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), new THREE.ShadowMaterial({ opacity: 0.2 }))
+  piso.rotation.x = -Math.PI / 2
+  piso.receiveShadow = true
+  cena.add(piso)
+
+  camera.position.setFromSphericalCoords(reduzMovimento ? raioFinal : raioInicial, polar, azimute).add(alvo)
   camera.lookAt(alvo)
 
   const controles = new OrbitControls(camera, renderer.domElement)
@@ -169,10 +139,10 @@ export async function iniciarHero3D(container) {
   controles.enableDamping = true
   controles.dampingFactor = 0.08
   controles.rotateSpeed = 0.5
-  controles.minAzimuthAngle = azimute - 0.6
-  controles.maxAzimuthAngle = azimute + 0.6
-  controles.minPolarAngle = polar - 0.18
-  controles.maxPolarAngle = polar + 0.18
+  controles.minAzimuthAngle = azimute - 0.7
+  controles.maxAzimuthAngle = azimute + 0.7
+  controles.minPolarAngle = polar - 0.2
+  controles.maxPolarAngle = polar + 0.2
 
   const ajustarTamanho = () => {
     const { clientWidth: w, clientHeight: h } = container
@@ -210,7 +180,8 @@ export async function iniciarHero3D(container) {
     entrou = true
     container.classList.add('hero__3d--pronto')
 
-    const legenda = container.closest('.hero__visual')?.querySelector('[data-legenda-hero]')
+    const visual = container.closest('.hero__visual')
+    const legenda = visual?.querySelector('[data-legenda-hero]')
     if (legenda) {
       legenda.innerHTML = `
         <span class="hero__etapa hero__etapa--1">${icones.girar} Arraste</span>
@@ -218,6 +189,8 @@ export async function iniciarHero3D(container) {
         <span class="hero__etapa hero__etapa--2">veja de outro ângulo</span>
       `
     }
+    const credito = visual?.querySelector('[data-credito-hero]')
+    if (credito) credito.hidden = false
 
     if (reduzMovimento) {
       renderizar()
@@ -228,7 +201,7 @@ export async function iniciarHero3D(container) {
     const passo = (agora) => {
       const p = Math.min(1, (agora - t0) / duracao)
       const suave = 1 - Math.pow(1 - p, 3)
-      const raio = 10.6 + (raioFinal - 10.6) * suave
+      const raio = raioInicial + (raioFinal - raioInicial) * suave
       camera.position.setFromSphericalCoords(raio, polar, azimute).add(alvo)
       camera.lookAt(alvo)
       renderizar()
