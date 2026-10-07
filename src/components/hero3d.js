@@ -214,6 +214,8 @@ export async function iniciarHero3D(container) {
   cena.add(piso)
 
   const controles = new OrbitControls(camera, renderer.domElement)
+  // no celular, arrastar na vertical rola a página; na horizontal, gira a peça
+  renderer.domElement.style.touchAction = 'pan-y'
   controles.enableZoom = false
   controles.enablePan = false
   controles.enableDamping = true
@@ -236,56 +238,73 @@ export async function iniciarHero3D(container) {
   }
   ajustarTamanho()
 
-  // compila os shaders das peças de uma vez, pra primeira troca não engasgar
-  for (const { modelo } of itensCarregados) {
-    cena.add(modelo)
-    try {
-      if (renderer.compileAsync && renderer.extensions.has('KHR_parallel_shader_compile')) {
-        await renderer.compileAsync(cena, camera)
-      } else {
-        renderer.compile(cena, camera)
-      }
-    } catch {
-      // se falhar, compila na hora de mostrar
+  // todas as peças ficam na cena desde o início (só uma visível por vez) e os
+  // shaders são compilados de uma vez, pra troca não engasgar
+  for (const { modelo } of itensCarregados) cena.add(modelo)
+  try {
+    if (renderer.compileAsync && renderer.extensions.has('KHR_parallel_shader_compile')) {
+      await renderer.compileAsync(cena, camera)
+    } else {
+      renderer.compile(cena, camera)
     }
-    cena.remove(modelo)
+  } catch {
+    // se falhar, compila na hora de mostrar
   }
-
-  const renderizar = () => {
-    controles.update()
-    renderer.render(cena, camera)
-  }
+  itensCarregados.forEach(({ modelo }) => (modelo.visible = false))
 
   // Só desenha quando algo muda (arraste, inércia do arraste, troca de peça),
   // em vez de redesenhar a cada quadro — poupa bateria e processador no celular.
+  // Um único loop: a animação de troca também passa por ele, e nunca há mais
+  // de um quadro agendado ao mesmo tempo.
   let visivel = false
   let quadro = null
-  const loop = () => {
-    quadro = null
-    if (!visivel) return
-    const mudou = controles.update()
-    renderer.render(cena, camera)
-    if (mudou) quadro = requestAnimationFrame(loop)
-  }
-  const iniciarLoop = () => {
-    if (quadro === null && visivel) quadro = requestAnimationFrame(loop)
-  }
-  controles.addEventListener('change', iniciarLoop)
-
-  // --- Troca de peça (câmera se afasta, troca o modelo, se aproxima de novo) ---
-  let grupoAtual = null
-  let indiceAtual = 0
+  let transicao = null // { t0, duracao, de, para }
 
   const posicionarCamera = (raio) => {
     camera.position.setFromSphericalCoords(raio, polar, azimute).add(alvo)
     camera.lookAt(alvo)
   }
 
+  const desenhar = () => {
+    let animando = false
+    if (transicao) {
+      const p = Math.min(1, (performance.now() - transicao.t0) / transicao.duracao)
+      const suave = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
+      posicionarCamera(transicao.de + (transicao.para - transicao.de) * suave)
+      if (p < 1) animando = true
+      else transicao = null
+    }
+    const mudou = controles.update()
+    renderer.render(cena, camera)
+    return mudou || animando
+  }
+
+  const loop = () => {
+    quadro = null
+    if (!visivel) return
+    const continuar = desenhar()
+    if (continuar && quadro === null) quadro = requestAnimationFrame(loop)
+  }
+  const iniciarLoop = () => {
+    if (quadro === null && visivel) quadro = requestAnimationFrame(loop)
+  }
+  controles.addEventListener('change', iniciarLoop)
+
+  // desenho imediato (redimensionar, primeira imagem)
+  const renderizar = () => {
+    controles.update()
+    renderer.render(cena, camera)
+  }
+
+  // --- Troca de peça (câmera se afasta, troca o modelo, se aproxima de novo) ---
+  let grupoAtual = null
+  let indiceAtual = 0
+
   const mostrar = (indice, { animado }) => {
     const { modelo, alturaModelo, item } = itensCarregados[indice]
-    if (grupoAtual) cena.remove(grupoAtual)
+    if (grupoAtual) grupoAtual.visible = false
     grupoAtual = modelo
-    cena.add(grupoAtual)
+    grupoAtual.visible = true
     renderer.shadowMap.needsUpdate = true
     const cam = { ...CAMERA_PADRAO, ...item.camera }
     ;({ azimute, polar } = cam)
@@ -303,20 +322,14 @@ export async function iniciarHero3D(container) {
     botoesPonto.forEach((b, i) => b.setAttribute('aria-current', String(i === indice)))
 
     if (!animado || reduzMovimento) {
+      transicao = null
       posicionarCamera(raioFinal)
       renderizar()
       return
     }
-    const t0 = performance.now()
-    const duracao = 650
-    const passo = (agora) => {
-      const p = Math.min(1, (agora - t0) / duracao)
-      const suave = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
-      posicionarCamera(raioInicial + (raioFinal - raioInicial) * suave)
-      renderizar()
-      if (p < 1) requestAnimationFrame(passo)
-    }
-    requestAnimationFrame(passo)
+    transicao = { t0: performance.now(), duracao: 650, de: raioInicial, para: raioFinal }
+    posicionarCamera(raioInicial)
+    iniciarLoop()
   }
 
   // --- Avanço automático, pausável (hover, arrasto, botão, reduced-motion) ---
